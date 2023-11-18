@@ -19,6 +19,7 @@ messages:
   leaveFormat: "&7[&c-&7] &7%player_name%"
   pluginReload: "&aPlugin Reloaded"
   updateAvailable: "&cupdate available!"
+  staffChatArgs: "&cUsage: /staff <message here>"
 motdLines:
   - "&7Welcome &a%player_name%"
   - "&7There are &e%server_online% &7online players out of &e %server_max_players%"

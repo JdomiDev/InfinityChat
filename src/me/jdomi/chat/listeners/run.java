@@ -83,6 +83,8 @@ public class run
         main.chat.getCommand("ic").setExecutor((CommandExecutor)new commands(main.chat));
         main.chat.getCommand("infinitychat").setExecutor((CommandExecutor)new commands(main.chat));
         main.chat.getCommand("infinitychat-reload").setExecutor((CommandExecutor)new commands(main.chat));
+        main.chat.getCommand("staff").setExecutor((CommandExecutor)new commands(main.chat));
+        main.chat.getCommand("s").setExecutor((CommandExecutor)new commands(main.chat));
         main.pm.registerEvents((Listener)main.chat, (Plugin)main.chat);
         main.pm.registerEvents(new onchat(), (Plugin)main.chat);
         main.pm.registerEvents(new onleave(), (Plugin)main.chat);

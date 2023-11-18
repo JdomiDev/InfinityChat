@@ -121,73 +121,90 @@ public class onchat implements Listener
 
             for (String groups : groupsList)
             {
-
                 n2++;
-                Permission perm = new Permission(ConfigManager.settings.getString("settings.permPrefix") + "." + ConfigManager.settings.getString("settings.permPrefix"), PermissionDefault.FALSE);
+                Permission perm = new Permission(ConfigManager.settings.getString("settings.permPrefix") + "." + groups, PermissionDefault.FALSE);
                 if (player.hasPermission(perm))
                 {
-                    //disabled cause broken enable if fixed
+                    //if placeholderapi
                     if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
                     {
 
 
 
-                        String str1 = ConfigManager.settings.getString("settings.chatFormat");
-                        String withPlaceholdersSet = PlaceholderAPI.setPlaceholders(e.getPlayer(), str1);
-                        String str2 = withPlaceholdersSet.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
-                        String str3 = str2.replace("%player_name%", e.getPlayer().getName());
-                        String str4 = str3.replace("%arrow%", "»");
-                        String str5 = str4.replace("%message%", e.getMessage());
-                        e.setFormat(IridiumColorAPI.process(str5));
+                        String format = ConfigManager.settings.getString("settings.chatFormat");
+                        format= PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
+                        format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
+                        format = format.replace("%player_name%", e.getPlayer().getName());
+                        format = format.replace("%arrow%", "»");
+                        format = format.replace("%message%", e.getMessage());
+
+
+                        if(e.getPlayer().hasPermission("ic.placeholderChat") && e.isCancelled() == false)
+                        {
+                            format = PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
+                            Bukkit.broadcastMessage(IridiumColorAPI.process(format));
+                        }
+                        else if(e.isCancelled() == false)
+                        {
+                            Bukkit.broadcastMessage(IridiumColorAPI.process(format));
+                        }
+                        e.setCancelled(true);
 
 
                         break;
                     }
+                    // if no placeholderapi
+                    String format = ConfigManager.settings.getString("settings.chatFormat");
+                    format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
+                    format = format.replace("%player_name%", e.getPlayer().getName());
+                    format = format.replace("%arrow%", "»");
+                    format = format.replace("%message%", e.getMessage());
+                    Bukkit.broadcastMessage(IridiumColorAPI.process(format));
+                    e.setCancelled(true);
 
-                    String inported = ConfigManager.settings.getString("settings.chatFormat");
-                    String replaced1 = inported.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
-                    String replaced2 = replaced1.replace("%player_name%", e.getPlayer().getName());
-                    String replaced3 = replaced2.replace("%arrow%", "»");
-                    String replaced4 = replaced3.replace("%message%", e.getMessage());
-                    e.setFormat(IridiumColorAPI.process(replaced4));
 
                     break;
                 }
-                if (n2 == n1)
+
+                // if no groups
+                else if (n2 == n1)
                 {
-                    //disabled cause broken enable if fixed
+                    //if papi
                     if (main.chat.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"))
                     {
 
 
-                        String inported = PlaceholderAPI.setPlaceholders(e.getPlayer(), ConfigManager.settings.getString("settings.noPermissionChatFormat"));
-                        String replaced1 = inported.replace("%player_name%", e.getPlayer().getName());
-                        String replaced2 = replaced1.replace("%arrow%", "»");
-                        String replaced3 = replaced2.replace("%message%", e.getMessage());
+                        String format = PlaceholderAPI.setPlaceholders(e.getPlayer(), ConfigManager.settings.getString("settings.noGroupChatFormat"));
+                        format = format.replace("%player_name%", e.getPlayer().getName());
+                        format = format.replace("%arrow%", "»");
+                        format = format.replace("%message%", e.getMessage());
                         if(e.getPlayer().hasPermission("ic.placeholderChat") && e.isCancelled() == false)
                         {
-                            replaced3 = PlaceholderAPI.setPlaceholders(e.getPlayer(), replaced3);
-                            Bukkit.broadcastMessage(IridiumColorAPI.process(replaced3));
+                            format = PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
+                            Bukkit.broadcastMessage(IridiumColorAPI.process(format));
                         }
                         else if(e.isCancelled() == false)
                         {
-                            Bukkit.broadcastMessage(IridiumColorAPI.process(replaced3));
+                            Bukkit.broadcastMessage(IridiumColorAPI.process(format));
                         }
                         e.setCancelled(true);
 
                     }
-                    else {
+                    else
+                    {
+                        //if no papi
 
-                        String inported = ConfigManager.settings.getString("settings.noPermissionChatFormat");
-                        String replaced1 = inported.replace("%player_name%", e.getPlayer().getName());
-                        String replaced2 = replaced1.replace("%arrow%", "»");
-                        String replaced3 = replaced2.replace("%message%", e.getMessage());
+                        String format = ConfigManager.settings.getString("settings.noPermissionChatFormat");
+                        format = format.replace("%player_name%", e.getPlayer().getName());
+                        format = format.replace("%arrow%", "»");
+                        format = format.replace("%message%", e.getMessage());
                         if(e.isCancelled() == false)
                         {
-                            Bukkit.broadcastMessage(IridiumColorAPI.process(replaced3));
+                            Bukkit.broadcastMessage(IridiumColorAPI.process(format));
                         }
                         e.setCancelled(true);
                     }
+                    break;
                 }
                 perm = null;
             }

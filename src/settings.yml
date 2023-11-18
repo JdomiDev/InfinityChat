@@ -34,7 +34,9 @@ settings:
   motdDelayTime: "3"
   chatCooldownTime: "3"
   chatFormat: "%prefix%&7%player_name% &b%arrow% &7%message%"
-  noPermissionChatFormat: "&7%player_name% &b%arrow% &7%message%"
+  noGroupChatFormat: "&7%player_name% &b%arrow% &7%message%"
+  staffChatFormat: "<GRADIENT:a31d00>[ICStaff]</GRADIENT:ff2d00>&7 %prefix%&8%player_name%&b %arrow%&7%message%"
+  noGroupStaffChatFormat: "<GRADIENT:a31d00>[ICStaff]</GRADIENT:ff2d00>&7 &8%player_name%&b %arrow%&7%message%"
   permPrefix: "message"
   joinSound:
     enabled: "true"

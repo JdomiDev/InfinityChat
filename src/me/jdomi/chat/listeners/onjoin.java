@@ -27,8 +27,11 @@ public class onjoin implements Listener
     {
         if (ConfigManager.settings.getString("settings.updateChecking").equalsIgnoreCase("true") && (e.getPlayer().hasPermission("ic.*") || e.getPlayer().isOp()))
         {
-            e.getPlayer().sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.updateAvailable")));
-            e.getPlayer().sendMessage(IridiumColorAPI.process("&chttps://modrinth.com/plugin/infinitychat/version/latest"));
+            if (main.updateAvailable)
+            {
+                e.getPlayer().sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + "&cV" + main.updateVer + " "+ConfigManager.msg.getString("messages.updateAvailable")));
+                e.getPlayer().sendMessage(IridiumColorAPI.process("&chttps://modrinth.com/plugin/infinitychat/version/latest"));
+            }
         }
         if (ConfigManager.settings.getString("settings.joinParticle.enabled").equalsIgnoreCase("true"))
         {

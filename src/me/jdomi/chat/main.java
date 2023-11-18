@@ -29,6 +29,8 @@ public class main extends JavaPlugin implements Listener
 
     public static boolean updateAvailable = false;
 
+    public static String updateVer;
+
     public void onEnable()
     {
 
@@ -50,10 +52,14 @@ public class main extends JavaPlugin implements Listener
         {
             try
             {
+
                 URL url = new URL("https://raw.githubusercontent.com/JdomiDev/InfinityChat/main/version.txt");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
                 String line = reader.readLine();
                 reader.close();
+                updateVer = line;
+
+
                 if(Float.parseFloat(main.chat.getDescription().getVersion().replace(".","")) < (Float.parseFloat(line.replace(".",""))))
                 {
                     ConfigManager.console.sendMessage(IridiumColorAPI.process("<GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » new version available!    https://modrinth.com/plugin/infinitychat/version/latest"));
