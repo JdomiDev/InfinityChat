@@ -1,7 +1,8 @@
-InfinityChat - The Ultime Chat Moderation And Formatting Solution
+InfinityChat - The Ultime Chat Moderation And Formatting Solution
 
 Features:
 
+- Staff Chat (1.5.0+)
 - Join particles (1.4.0+)
 - AntiSwear
 - AntiSpam
@@ -19,15 +20,18 @@ Permissions:
 - message.group - Group Permission
 - ic.reload - Reload Plugin (/ic-reload)
 - ic.cc - Clear Chat (/cc)
-- ic.bypass - bypass chat cooldown limitation
+- ic.bypass - bypass chat cooldown limitation
+- ic.staff
 - ic.placeholderChat
+
 
 Commands:
 
-- ic-reload - reload config files
-- cc - clear chat
+- /staff
+- /ic-reload - reload config files
+- /cc - clear chat
 - (Some more aliases)
 
-Discord:   https://discord.com/invite/sERSmAtHPe
+Discord:   https://discord.com/invite/sERSmAtHPe
 
 ![alt text](https://images.polymart.org/proxy/?url=https%3A%2F%2Fi.ibb.co%2FYDyx7x9%2FK-pkiv-g-s.png&v=2)
