@@ -1,0 +1,19 @@
+main: me.jdomi.chat.main
+name: InfinityChat
+version: 1.4.1
+author: Jdomi
+api-version: 1.20
+softdepend:
+    - PlaceholderAPI
+commands:
+    ic-reload: { description: 'Reloads the configuration' }
+    infinitychat-reload: { description: 'Reloads the configuration' }
+    cc: { description: 'Clears the servers chat' }
+    clearchat: { description: 'Clears the servers chat' }
+    ic: { description: 'Download and find out! ;)' }
+    infinitychat: { description: 'Download and find out! ;)' }
+permissions:
+    ic.reload: { description: 'Acces for /ic-reload' }
+    ic.cc: { description: 'Acces for /cc' }
+    ic.bypass: { description: 'Bypass the chat spam filter' }
+    ic.placeholderChat: { description: 'Allow chat placeholders'}
