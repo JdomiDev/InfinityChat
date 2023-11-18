@@ -16,11 +16,11 @@ Features:
 
 Permissions:
 
-- ic.placeholderChat
 - message.group - Group Permission
 - ic.reload - Reload Plugin (/ic-reload)
 - ic.cc - Clear Chat (/cc)
 - ic.bypass - bypass chat cooldown limitation
+- ic.placeholderChat
 
 Commands:
 
