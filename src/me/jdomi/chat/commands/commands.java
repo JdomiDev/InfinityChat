@@ -184,6 +184,92 @@ public class commands implements CommandExecutor
                     sender.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.permission")));
                 }
             }
+            // local
+
+            else if(cmd.getLabel().equalsIgnoreCase("l") || cmd.getLabel().equalsIgnoreCase("local"))
+            {
+                if(ConfigManager.settings.getString("settings.localChat.enabled").equalsIgnoreCase("true"))
+                {
+                    float distance = Float.valueOf(ConfigManager.settings.getString("settings.localChat.localChatDistance"));
+
+
+                    String msg = "";
+                    for (int i = 0; i < args.length ; i++)
+                    {
+                        msg = msg + " " + args[i];
+                    }
+
+                    for(Player player : Bukkit.getServer().getOnlinePlayers())
+                    {
+
+                        if(distance >= ((Player) sender).getLocation().distance(player.getLocation()))
+                        {
+                            Set<String> groupsList = ConfigManager.groups.getConfigurationSection("groups").getKeys(false);
+                            int n1 = groupsList.size();
+                            int n2 = 0;
+
+                            for (String groups : groupsList)
+                            {
+                                n2++;
+                                Permission perm = new Permission(ConfigManager.settings.getString("settings.permPrefix") + "." + groups, PermissionDefault.FALSE);
+                                // groups
+                                if (sender.hasPermission(perm))
+                                {
+                                    //papi
+                                    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
+                                    {
+                                        String format = ConfigManager.settings.getString("settings.localChat.localChatFormat");
+                                        format= PlaceholderAPI.setPlaceholders(((Player) sender).getPlayer(), format);
+                                        format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
+                                        format = format.replace("%player_name%", ((Player) sender).getPlayer().getName());
+                                        format = format.replace("%arrow%", "»");
+                                        format = format.replace("%message%", msg);
+                                        player.sendMessage(IridiumColorAPI.process(format));
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        String format = ConfigManager.settings.getString("settings.localChat.localChatFormat");
+                                        format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
+                                        format = format.replace("%player_name%", ((Player) sender).getPlayer().getName());
+                                        format = format.replace("%arrow%", "»");
+                                        format = format.replace("%message%", msg);
+                                        player.sendMessage(IridiumColorAPI.process(format));
+                                        break;
+                                    }
+                                }
+                                else if (n2 == n1)
+                                {
+                                    //papi
+                                    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
+                                    {
+                                        String format = PlaceholderAPI.setPlaceholders(((Player) sender).getPlayer(), ConfigManager.settings.getString("settings.localChat.noGroupLocalChatFormat"));
+                                        format = format.replace("%player_name%", sender.getName());
+                                        format = format.replace("%arrow%", "»");
+                                        format = format.replace("%message%", msg);
+                                        player.sendMessage(IridiumColorAPI.process(format));
+                                        break;
+
+                                    }
+                                    else
+                                    {
+                                        String format = (ConfigManager.settings.getString("settings.localChat.noGroupLocalChatFormat"));
+                                        format = format.replace("%player_name%", sender.getName());
+                                        format = format.replace("%arrow%", "»");
+                                        format = format.replace("%message%", msg);
+                                        player.sendMessage(IridiumColorAPI.process(format));
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    sender.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.featureDisabled")));
+                }
+            }
         }
         else
         {
@@ -218,6 +304,10 @@ public class commands implements CommandExecutor
                 sender.sendMessage(IridiumColorAPI.process("<GRADIENT:fcc600>-------------------------InfinityChat-------------------------</GRADIENT:a4fc00>"));
                 sender.sendMessage(" ");
                 sender.sendMessage(" ");
+            }
+            else if (cmd.getLabel().equalsIgnoreCase("l") || cmd.getLabel().equalsIgnoreCase("local"))
+            {
+                sender.sendMessage(IridiumColorAPI.process("&4Error you are not a player"));
             }
 
         }

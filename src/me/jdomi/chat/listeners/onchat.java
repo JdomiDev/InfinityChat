@@ -32,22 +32,36 @@ public class onchat implements Listener
 
     public final Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
 
-
-    public String format(String msg)
+    public void sendChat(Player sender, String message)
     {
-        if (Bukkit.getVersion().contains("1.16"))
+        boolean forceLocalChat;
+        if(ConfigManager.settings.getString("settings.localChat.forceLocalChat").equalsIgnoreCase("true"))
         {
+            forceLocalChat = true;
+        }
+        else
+        {
+            forceLocalChat = false;
+        }
 
-            Matcher match = this.pattern.matcher(msg);
-            while (match.find())
+
+        if (forceLocalChat)
+        {
+            float configDistance = Float.valueOf(ConfigManager.settings.getString("settings.localChat.localChatDistance"));
+            for(Player player : Bukkit.getServer().getOnlinePlayers())
             {
-                String color = msg.substring(match.start(), match.end());
-                msg = msg.replace(color, "" + ChatColor.of(color));
+                double distance = player.getLocation().distance(sender.getLocation());
+                if(distance <= configDistance)
+                {
+                    player.sendMessage(IridiumColorAPI.process(message));
+                }
             }
         }
-        return ChatColor.translateAlternateColorCodes('&', msg);
+        else
+        {
+            Bukkit.broadcastMessage(IridiumColorAPI.process(message));
+        }
     }
-
 
     @EventHandler
     public void chatformat(AsyncPlayerChatEvent e)
@@ -105,15 +119,11 @@ public class onchat implements Listener
                 }
             }
         }
-        if (ConfigManager.settings.getString("settings.hexChat").equalsIgnoreCase("true"))
-        {
-            e.setMessage(format(e.getMessage()));
-        }
-
 
         if (ConfigManager.settings.getString("settings.chatFormatting").equalsIgnoreCase("true"))
         {
 
+            boolean forceLocal = Boolean.valueOf(ConfigManager.settings.getString("settings.localChat.forceLocalChat"));
 
             Set<String> groupsList = ConfigManager.groups.getConfigurationSection("groups").getKeys(false);
             int n1 = groupsList.size();
@@ -125,13 +135,20 @@ public class onchat implements Listener
                 Permission perm = new Permission(ConfigManager.settings.getString("settings.permPrefix") + "." + groups, PermissionDefault.FALSE);
                 if (player.hasPermission(perm))
                 {
+                    String format;
+
+                    if(forceLocal)
+                    {
+                        format = ConfigManager.settings.getString("settings.localChat.localChatFormat");
+                    }
+                    else
+                    {
+                        format = ConfigManager.settings.getString("settings.chatFormat");
+                    }
+
                     //if placeholderapi
                     if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
                     {
-
-
-
-                        String format = ConfigManager.settings.getString("settings.chatFormat");
                         format= PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
                         format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
                         format = format.replace("%player_name%", e.getPlayer().getName());
@@ -142,72 +159,76 @@ public class onchat implements Listener
                         if(e.getPlayer().hasPermission("ic.placeholderChat") && e.isCancelled() == false)
                         {
                             format = PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
-                            Bukkit.broadcastMessage(IridiumColorAPI.process(format));
+                            sendChat(e.getPlayer(), format);
+                            break;
                         }
-                        else if(e.isCancelled() == false)
+                        else if(!e.isCancelled())
                         {
-                            Bukkit.broadcastMessage(IridiumColorAPI.process(format));
+                            sendChat(e.getPlayer(), format);
+                            break;
                         }
-                        e.setCancelled(true);
-
-
+                    }
+                    else
+                    {
+                        // if no placeholderapi
+                        format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
+                        format = format.replace("%player_name%", e.getPlayer().getName());
+                        format = format.replace("%arrow%", "»");
+                        format = format.replace("%message%", e.getMessage());
+                        sendChat(e.getPlayer(), format);
                         break;
                     }
-                    // if no placeholderapi
-                    String format = ConfigManager.settings.getString("settings.chatFormat");
-                    format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
-                    format = format.replace("%player_name%", e.getPlayer().getName());
-                    format = format.replace("%arrow%", "»");
-                    format = format.replace("%message%", e.getMessage());
-                    Bukkit.broadcastMessage(IridiumColorAPI.process(format));
-                    e.setCancelled(true);
-
-
-                    break;
                 }
 
                 // if no groups
                 else if (n2 == n1)
                 {
+                    String format;
+                    if(forceLocal)
+                    {
+                        format = ConfigManager.settings.getString("settings.localChat.noGroupLocalChatFormat");
+                    }
+                    else
+                    {
+                        format = ConfigManager.settings.getString("settings.noGroupChatFormat");
+                    }
+
                     //if papi
                     if (main.chat.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"))
                     {
 
-
-                        String format = PlaceholderAPI.setPlaceholders(e.getPlayer(), ConfigManager.settings.getString("settings.noGroupChatFormat"));
                         format = format.replace("%player_name%", e.getPlayer().getName());
                         format = format.replace("%arrow%", "»");
                         format = format.replace("%message%", e.getMessage());
                         if(e.getPlayer().hasPermission("ic.placeholderChat") && e.isCancelled() == false)
                         {
                             format = PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
-                            Bukkit.broadcastMessage(IridiumColorAPI.process(format));
+                            sendChat(e.getPlayer(), format);
+                            break;
                         }
-                        else if(e.isCancelled() == false)
+                        else if(!e.isCancelled())
                         {
-                            Bukkit.broadcastMessage(IridiumColorAPI.process(format));
+                            sendChat(e.getPlayer(), format);
+                            break;
                         }
-                        e.setCancelled(true);
 
                     }
                     else
                     {
                         //if no papi
-
-                        String format = ConfigManager.settings.getString("settings.noPermissionChatFormat");
                         format = format.replace("%player_name%", e.getPlayer().getName());
                         format = format.replace("%arrow%", "»");
                         format = format.replace("%message%", e.getMessage());
-                        if(e.isCancelled() == false)
+                        if(!e.isCancelled())
                         {
-                            Bukkit.broadcastMessage(IridiumColorAPI.process(format));
+                            sendChat(e.getPlayer(), format);
+                            break;
                         }
-                        e.setCancelled(true);
                     }
-                    break;
                 }
                 perm = null;
             }
+            e.setCancelled(true);
         }
 
         if (ConfigManager.settings.getString("settings.chatCooldown").equalsIgnoreCase("true"))

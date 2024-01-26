@@ -24,22 +24,14 @@ public class onleave implements Listener
 
                 e.setQuitMessage("");
 
-                String format = ConfigManager.msg.getString("messages.leaveFormat");
-                Bukkit.broadcastMessage(format);
-                String replaced = PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
-
-                Bukkit.broadcastMessage(IridiumColorAPI.process(replaced));
+                Bukkit.broadcastMessage(IridiumColorAPI.process(PlaceholderAPI.setPlaceholders(e.getPlayer(), ConfigManager.msg.getString("messages.leaveFormat"))));
 
             }
             else
             {
 
                 e.setQuitMessage("");
-
-                String format = ConfigManager.msg.getString("messages.leaveFormat");
-                String replaced = format.replace("%player_name%", e.getPlayer().getDisplayName());
-
-                Bukkit.broadcastMessage(IridiumColorAPI.process(replaced));
+                Bukkit.broadcastMessage(IridiumColorAPI.process(ConfigManager.msg.getString("messages.leaveFormat").replace("%player_name%", e.getPlayer().getDisplayName())));
             }
         }
     }

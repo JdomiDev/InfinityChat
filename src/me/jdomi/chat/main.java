@@ -26,19 +26,15 @@ public class main extends JavaPlugin implements Listener
 {
     public static main chat;
     public static PluginManager pm = Bukkit.getServer().getPluginManager();
-
     public static boolean updateAvailable = false;
 
     public static String updateVer;
-
     public void onEnable()
     {
-
         // metrics
         int pluginId = 20326;
         metrics metrics = new metrics(this, pluginId);
         chat = this;
-
         // plugin enable logic
 
         ConfigManager.DefaultConfig();
@@ -46,34 +42,12 @@ public class main extends JavaPlugin implements Listener
         run.depend();
         run.enableMSG();
         run.register();
-        run.versionUpdate();
+        //run.versionUpdate();
+        run.updateCheck();
 
-        if(ConfigManager.settings.getString("settings.updateChecking").equalsIgnoreCase("true"))
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI") && 0 == 1)
         {
-            try
-            {
-
-                URL url = new URL("https://raw.githubusercontent.com/JdomiDev/InfinityChat/main/version.txt");
-                BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-                String line = reader.readLine();
-                reader.close();
-                updateVer = line;
-
-
-                if(Float.parseFloat(main.chat.getDescription().getVersion().replace(".","")) < (Float.parseFloat(line.replace(".",""))))
-                {
-                    ConfigManager.console.sendMessage(IridiumColorAPI.process("<GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » new version available!    https://modrinth.com/plugin/infinitychat/version/latest"));
-                    updateAvailable = true;
-                }
-                else
-                {
-                    ConfigManager.console.sendMessage(IridiumColorAPI.process("<GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » up to date!"));
-                }
-            }
-            catch(Exception ex)
-            {
-                ConfigManager.console.sendMessage(IridiumColorAPI.process("<GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » &4up to date!"));
-            }
+            run.placeHolderUpdate();
         }
     }
 }

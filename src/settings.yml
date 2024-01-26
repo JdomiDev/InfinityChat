@@ -23,21 +23,34 @@ plugin-prefix: "<GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » "
 settings:
   debugMode: "false"
   updateChecking: "true"
-  joinFormat: "true"
-  leaveFormat: "true"
   chatFormatting: "true"
+  # Chat - Moderation
   hexChat: "true"
   antiSwear: "true"
-  motd: "true"
   antiChatRepeat: "true"
   chatCooldown: "true"
-  motdDelayTime: "3"
   chatCooldownTime: "3"
+  # Chat - Customization
+  joinFormat: "true"
+  leaveFormat: "true"
+  motdDelayTime: "3"
+  motd: "true"
+  # Normal Chat
   chatFormat: "%prefix%&7%player_name% &b%arrow% &7%message%"
   noGroupChatFormat: "&7%player_name% &b%arrow% &7%message%"
+  # Permission
+  permPrefix: "message"
+  # Staff Chat
   staffChatFormat: "<GRADIENT:a31d00>[ICStaff]</GRADIENT:ff2d00>&7 %prefix%&8%player_name%&b %arrow%&7%message%"
   noGroupStaffChatFormat: "<GRADIENT:a31d00>[ICStaff]</GRADIENT:ff2d00>&7 &8%player_name%&b %arrow%&7%message%"
-  permPrefix: "message"
+  # Local Chat
+  localChat:
+    enabled: "true"
+    forceLocalChat: "false"
+    localChatDistance: "500"
+    localChatFormat: "<GRADIENT:b3b300>[LOCAL]</GRADIENT:ffffff>&7 %prefix%&8%player_name%&b %arrow%&7%message%"
+    noGroupLocalChatFormat: "<GRADIENT:b3b300>[LOCAL]</GRADIENT:ffffff>&7 &8%player_name%&b %arrow%&7%message%"
+  # Fun Customisation
   joinSound:
     enabled: "true"
     delay: "3"

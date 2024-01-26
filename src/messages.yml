@@ -20,6 +20,7 @@ messages:
   pluginReload: "&aPlugin Reloaded"
   updateAvailable: "&cupdate available!"
   staffChatArgs: "&cUsage: /staff <message here>"
+  featureDisabled: "&cSorry this feature is disabled by the owner of the server!"
 motdLines:
   - "&7Welcome &a%player_name%"
   - "&7There are &e%server_online% &7online players out of &e %server_max_players%"

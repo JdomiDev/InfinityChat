@@ -1,15 +1,21 @@
 package me.jdomi.chat.listeners;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.jdomi.chat.api.config.ConfigManager;
 import me.jdomi.chat.api.hex.IridiumColorAPI;
 import me.jdomi.chat.commands.commands;
 import me.jdomi.chat.main;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
-
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.*;
 
 
 public class run
@@ -85,6 +91,8 @@ public class run
         main.chat.getCommand("infinitychat-reload").setExecutor((CommandExecutor)new commands(main.chat));
         main.chat.getCommand("staff").setExecutor((CommandExecutor)new commands(main.chat));
         main.chat.getCommand("s").setExecutor((CommandExecutor)new commands(main.chat));
+        main.chat.getCommand("local").setExecutor((CommandExecutor)new commands(main.chat));
+        main.chat.getCommand("l").setExecutor((CommandExecutor)new commands(main.chat));
         main.pm.registerEvents((Listener)main.chat, (Plugin)main.chat);
         main.pm.registerEvents(new onchat(), (Plugin)main.chat);
         main.pm.registerEvents(new onleave(), (Plugin)main.chat);
@@ -119,5 +127,57 @@ public class run
 
                 ConfigManager.console.sendMessage(IridiumColorAPI.process("&4Internal error contact devs"));
             }
+    }
+    public static void updateCheck()
+    {
+        if(ConfigManager.settings.getString("settings.updateChecking").equalsIgnoreCase("true"))
+        {
+            try
+            {
+
+                URL url = new URL("https://raw.githubusercontent.com/JdomiDev/InfinityChat/main/version.txt");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+                String line = reader.readLine();
+                reader.close();
+                main.updateVer = line;
+
+
+                if(Float.parseFloat(main.chat.getDescription().getVersion().replace(".","")) < (Float.parseFloat(line.replace(".",""))))
+                {
+                    ConfigManager.console.sendMessage(IridiumColorAPI.process("<GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » new version available!    https://modrinth.com/plugin/infinitychat/version/latest"));
+                    main.updateAvailable = true;
+                }
+                else
+                {
+                    ConfigManager.console.sendMessage(IridiumColorAPI.process("<GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » up to date!"));
+                }
+            }
+            catch(Exception ex)
+            {
+                ConfigManager.console.sendMessage(IridiumColorAPI.process("<GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » &4up to date!"));
+            }
+        }
+    }
+    public static void placeHolderUpdate()
+    {
+        List<String> extensions = List.of("Player","PlayerList","PlayerStats","PlayerTime","Server","Statistic");
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        (new BukkitRunnable()
+        {
+            public void run()
+            {
+                for(String row : extensions)
+                {
+                    Bukkit.dispatchCommand(console, "papi reload");
+                    (new BukkitRunnable()
+                    {
+                        public void run()
+                        {
+                            Bukkit.dispatchCommand(console, "papi ecloud download "+row);
+                        }
+                    }).runTaskLater((Plugin)main.chat, 50);
+                }
+            }
+        }).runTaskLater((Plugin)main.chat, 100);
     }
 }
