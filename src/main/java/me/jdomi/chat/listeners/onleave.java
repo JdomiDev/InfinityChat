@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-
+import github.scarsz.discordsrv.util.DiscordUtil;
 
 public class onleave implements Listener
 {
@@ -32,6 +32,10 @@ public class onleave implements Listener
 
                 e.setQuitMessage("");
                 Bukkit.broadcastMessage(IridiumColorAPI.process(ConfigManager.msg.getString("messages.leaveFormat").replace("%player_name%", e.getPlayer().getDisplayName())));
+            }
+            if (1 == 1)
+            {
+
             }
         }
     }
