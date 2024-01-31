@@ -1,4 +1,4 @@
-InfinityChat - The Ultime Chat Moderation And Formatting Solution
+InfinityChat - The Ultimate Chat Moderation And Formatting Solution
 
 Features:
 
