@@ -13,6 +13,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import me.jdomi.chat.api.metrics.metrics;
+import org.bukkit.scheduler.BukkitRunnable;
+import me.jdomi.chat.listeners.announcement;
 
 import java.io.BufferedReader;
 import java.io.ObjectInputFilter;
@@ -47,12 +49,20 @@ public class main extends JavaPlugin implements Listener
         run.depend();
         run.enableMSG();
         run.register();
-        //run.versionUpdate();
+        run.versionUpdate();
+        //announcement.autoAnnouncments();
         run.updateCheck();
 
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI") && 0 == 1)
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI") && ConfigManager.settings.getString("depend-update").equalsIgnoreCase("true"))
         {
-            run.placeHolderUpdate();
+
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(main.chat, new Runnable()
+            {
+                public void run()
+                {
+                    run.placeHolderUpdate();
+                }
+            }, 100);
         }
     }
 }

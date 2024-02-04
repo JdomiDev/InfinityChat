@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.Statistic;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -25,7 +26,8 @@ public class onjoin implements Listener
     @EventHandler
     public void onjoin(final PlayerJoinEvent e)
     {
-        if (ConfigManager.settings.getString("settings.updateChecking").equalsIgnoreCase("true") && (e.getPlayer().hasPermission("ic.*") || e.getPlayer().isOp()))
+        // update check
+        if (ConfigManager.settings.getBoolean("settings.updateChecking") && (e.getPlayer().hasPermission("ic.*") || e.getPlayer().isOp()))
         {
             if (main.updateAvailable)
             {
@@ -33,12 +35,13 @@ public class onjoin implements Listener
                 e.getPlayer().sendMessage(IridiumColorAPI.process("&chttps://modrinth.com/plugin/infinitychat/version/latest"));
             }
         }
-        if (ConfigManager.settings.getString("settings.joinParticle.enabled").equalsIgnoreCase("true"))
+        // particle
+        if (ConfigManager.settings.getBoolean("settings.joinParticle.enabled"))
         {
             try
             {
-                int cooldownSec = Integer.valueOf(ConfigManager.settings.getString("settings.joinParticle.delay")).intValue() * 20;
-                int multiplier = Integer.valueOf(ConfigManager.settings.getString("settings.joinParticle.multiplier")).intValue() * 20;
+                int cooldownSec = ConfigManager.settings.getInt("settings.joinParticle.delay") * 20;
+                int multiplier = ConfigManager.settings.getInt("settings.joinParticle.multiplier") * 20;
                 String particleType = ConfigManager.settings.getString("settings.joinParticle.particle").toUpperCase();
 
                 (new BukkitRunnable()
@@ -55,7 +58,8 @@ public class onjoin implements Listener
                 console.sendMessage("&4Error Spawning Particles!");
             }
         }
-        if (ConfigManager.settings.getString("settings.joinFormat").equalsIgnoreCase("true"))
+        // join format
+        if (ConfigManager.settings.getBoolean("settings.joinFormat"))
         {
             if (main.chat.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"))
             {
@@ -76,40 +80,69 @@ public class onjoin implements Listener
                 Bukkit.broadcastMessage(IridiumColorAPI.process(replaced));
             }
         }
-
-        if (ConfigManager.settings.getString("settings.joinSound.enabled").equalsIgnoreCase("true"))
+        // join sound
+        if (ConfigManager.settings.getBoolean("settings.joinSound.enabled"))
         {
-
-            try
+            // global
+            if(!ConfigManager.settings.getBoolean("settings.joinSound.global"))
             {
-                int cooldownSec = Integer.valueOf(ConfigManager.settings.getString("settings.joinSound.delay")).intValue() * 20;
-
-                (new BukkitRunnable()
+                try
                 {
-                    public void run()
+                    int cooldownSec = ConfigManager.settings.getInt("settings.joinSound.delay") * 20;
+
+                    (new BukkitRunnable()
                     {
-                        e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.valueOf(ConfigManager.settings.getString("settings.joinSound.sound").toUpperCase()), 1.0F, 1.0F);
-                    }
-                }).runTaskLater((Plugin)main.chat, cooldownSec);
+                        public void run()
+                        {
+                            Bukkit.broadcastMessage("nigg2a");
+                            e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.valueOf(ConfigManager.settings.getString("settings.joinSound.sound").toUpperCase()), 1.0F, 1.0F);
+                        }
+                    }).runTaskLater((Plugin)main.chat, cooldownSec);
+                }
+                catch (Exception ex)
+                {
+                    console.sendMessage(IridiumColorAPI.process("&4Error with sound"));
+                }
             }
-            catch (Exception ex)
+            // no global
+            else if(ConfigManager.settings.getBoolean("settings.joinSound.global"))
             {
-                console.sendMessage(IridiumColorAPI.process("&4Error with sound"));
+                try
+                {
+                    int cooldownSec = ConfigManager.settings.getInt("settings.joinSound.delay") * 20;
+
+                    (new BukkitRunnable()
+                    {
+                        public void run()
+                        {
+                            for(Player player : Bukkit.getServer().getOnlinePlayers())
+                            {
+                                player.playSound(player.getLocation(), Sound.valueOf(ConfigManager.settings.getString("settings.joinSound.sound").toUpperCase()), 1.0F, 1.0F);
+                            }
+                        }
+
+                    }).runTaskLater((Plugin)main.chat, cooldownSec);
+                }
+                catch (Exception ex)
+                {
+                    console.sendMessage(IridiumColorAPI.process("&4Error with sound"));
+                }
             }
         }
-
-        if (ConfigManager.settings.getString("settings.motd").equalsIgnoreCase("true"))
+        // motd
+        if (ConfigManager.settings.getBoolean("settings.motd"))
         {
             final List<String> motdLines = ConfigManager.msg.getStringList("motdLines");
 
             try
             {
-                int cooldownSec = Integer.valueOf(ConfigManager.settings.getString("settings.motdDelayTime")).intValue() * 20;
+                int cooldownSec = ConfigManager.settings.getInt("settings.motdDelayTime") * 20;
 
                 (new BukkitRunnable()
                 {
                     public void run()
                     {
+                        // if papi
                         if (main.chat.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
 
 
@@ -121,6 +154,7 @@ public class onjoin implements Listener
                             }
 
                         }
+                        // no papi
                         else {
 
                             for (String str : motdLines) {

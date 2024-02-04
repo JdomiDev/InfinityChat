@@ -2,6 +2,8 @@ package me.jdomi.chat.api.config;
 
 import java.io.File;
 import java.io.IOException;
+
+import me.jdomi.chat.api.hex.IridiumColorAPI;
 import me.jdomi.chat.main;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,28 +14,26 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigManager
 {
+
     public static main plugin;
     public static ConsoleCommandSender console = main.chat.getServer().getConsoleSender();
 
     public static File msgF = new File(main.chat.getDataFolder().getAbsolutePath(), "messages.yml");
-    public static FileConfiguration msg = (FileConfiguration)YamlConfiguration.loadConfiguration(msgF);
+    public static FileConfiguration msg = YamlConfiguration.loadConfiguration(msgF);
 
 
     public static File groupsF = new File(main.chat.getDataFolder().getAbsolutePath(), "groups.yml");
-    public static FileConfiguration groups = (FileConfiguration)YamlConfiguration.loadConfiguration(groupsF);
+    public static FileConfiguration groups = YamlConfiguration.loadConfiguration(groupsF);
 
 
 
     public static File wordsF = new File(main.chat.getDataFolder().getAbsolutePath(), "censored-words.yml");
-    public static FileConfiguration words = (FileConfiguration)YamlConfiguration.loadConfiguration(wordsF);
+    public static FileConfiguration words = YamlConfiguration.loadConfiguration(wordsF);
 
 
 
     public static File settingsF = new File(main.chat.getDataFolder().getAbsolutePath(), "settings.yml");
-    public static FileConfiguration settings = (FileConfiguration)YamlConfiguration.loadConfiguration(settingsF);
-
-
-
+    public static FileConfiguration settings = YamlConfiguration.loadConfiguration(settingsF);
 
 
     public static void saveMessagesGroups()
@@ -41,16 +41,16 @@ public class ConfigManager
         try
         {
             groups.save(groupsF);
-            groups = (FileConfiguration)YamlConfiguration.loadConfiguration(groupsF);
+            groups = YamlConfiguration.loadConfiguration(groupsF);
 
             msg.save(msgF);
-            msg = (FileConfiguration)YamlConfiguration.loadConfiguration(msgF);
+            msg = YamlConfiguration.loadConfiguration(msgF);
 
             words.save(wordsF);
-            words = (FileConfiguration)YamlConfiguration.loadConfiguration(wordsF);
+            words = YamlConfiguration.loadConfiguration(wordsF);
 
             settings.save(settingsF);
-            settings = (FileConfiguration)YamlConfiguration.loadConfiguration(settingsF);
+            settings = YamlConfiguration.loadConfiguration(settingsF);
 
         }
         catch (IOException iOException)
@@ -111,12 +111,12 @@ public class ConfigManager
         words = null;
         groups = null;
 
-        settings = (FileConfiguration)YamlConfiguration.loadConfiguration(settingsF);
+        settings = YamlConfiguration.loadConfiguration(settingsF);
 
-        words = (FileConfiguration)YamlConfiguration.loadConfiguration(wordsF);
+        words = YamlConfiguration.loadConfiguration(wordsF);
 
-        msg = (FileConfiguration)YamlConfiguration.loadConfiguration(msgF);
+        msg = YamlConfiguration.loadConfiguration(msgF);
 
-        groups = (FileConfiguration)YamlConfiguration.loadConfiguration(groupsF);
+        groups = YamlConfiguration.loadConfiguration(groupsF);
     }
 }

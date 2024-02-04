@@ -35,7 +35,7 @@ public class onchat implements Listener
     public void sendChat(Player sender, String message)
     {
         boolean forceLocalChat;
-        if(ConfigManager.settings.getString("settings.localChat.forceLocalChat").equalsIgnoreCase("true"))
+        if(ConfigManager.settings.getBoolean("settings.localChat.forceLocalChat"))
         {
             forceLocalChat = true;
         }
@@ -47,7 +47,7 @@ public class onchat implements Listener
 
         if (forceLocalChat)
         {
-            float configDistance = Float.valueOf(ConfigManager.settings.getString("settings.localChat.localChatDistance"));
+            float configDistance = (float) ConfigManager.settings.getInt("settings.localChat.localChatDistance");
             for(Player player : Bukkit.getServer().getOnlinePlayers())
             {
                 double distance = player.getLocation().distance(sender.getLocation());
@@ -70,7 +70,9 @@ public class onchat implements Listener
 
         String message = e.getMessage().toLowerCase();
 
-        if (ConfigManager.settings.getString("settings.antiChatRepeat").equalsIgnoreCase("true"))
+        // anti spam
+
+        if (ConfigManager.settings.getBoolean("settings.antiChatRepeat"))
         {
 
 
@@ -88,8 +90,8 @@ public class onchat implements Listener
 
             previousMessages.put(player, message);
         }
-
-        if (ConfigManager.settings.getString("settings.chatCooldown").equalsIgnoreCase("true"))
+        // cooldown
+        if (ConfigManager.settings.getBoolean("settings.chatCooldown"))
         {
             if (!player.hasPermission("ic.cooldown.bypass"))
             {
@@ -103,8 +105,8 @@ public class onchat implements Listener
                 }
             }
         }
-
-        if (ConfigManager.settings.getString("settings.antiSwear").equalsIgnoreCase("true"))
+        // antiswear
+        if (ConfigManager.settings.getBoolean("settings.antiSwear"))
         {
             for (String blockedWord : ConfigManager.words.getStringList("censored-words"))
             {
@@ -119,11 +121,11 @@ public class onchat implements Listener
                 }
             }
         }
-
-        if (ConfigManager.settings.getString("settings.chatFormatting").equalsIgnoreCase("true"))
+        // chat formatting
+        if (ConfigManager.settings.getBoolean("settings.chatFormatting"))
         {
 
-            boolean forceLocal = Boolean.valueOf(ConfigManager.settings.getString("settings.localChat.forceLocalChat"));
+            boolean forceLocal = ConfigManager.settings.getBoolean("settings.localChat.forceLocalChat");
 
             Set<String> groupsList = ConfigManager.groups.getConfigurationSection("groups").getKeys(false);
             int n1 = groupsList.size();
@@ -133,6 +135,7 @@ public class onchat implements Listener
             {
                 n2++;
                 Permission perm = new Permission(ConfigManager.settings.getString("settings.permPrefix") + "." + groups, PermissionDefault.FALSE);
+                // has group perm
                 if (player.hasPermission(perm))
                 {
                     String format;
@@ -149,7 +152,7 @@ public class onchat implements Listener
                     //if placeholderapi
                     if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
                     {
-                        format= PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
+                        format = PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
                         format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
                         format = format.replace("%player_name%", e.getPlayer().getName());
                         format = format.replace("%arrow%", "»");
@@ -231,7 +234,7 @@ public class onchat implements Listener
             e.setCancelled(true);
         }
 
-        if (ConfigManager.settings.getString("settings.chatCooldown").equalsIgnoreCase("true"))
+        if (ConfigManager.settings.getBoolean("settings.chatCooldown"))
         {
 
 
@@ -240,7 +243,7 @@ public class onchat implements Listener
 
             try
             {
-                int cooldownSec = Integer.valueOf(ConfigManager.settings.getString("settings.chatCooldownTime")).intValue() * 20;
+                int cooldownSec = ConfigManager.settings.getInt("settings.chatCooldownTime") * 20;
                 (new BukkitRunnable()
                 {
                     public void run()

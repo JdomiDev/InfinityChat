@@ -3,6 +3,7 @@ package me.jdomi.chat.commands;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.jdomi.chat.api.config.ConfigManager;
 import me.jdomi.chat.api.hex.IridiumColorAPI;
+import me.jdomi.chat.listeners.run;
 import me.jdomi.chat.main;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -30,7 +31,32 @@ public class commands implements CommandExecutor
             {
                 if (sender.hasPermission("ic.reload"))
                 {
+                    run.versionUpdate();
                     ConfigManager.ReloadConfig(); sender.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.pluginReload")));
+                }
+                else
+                {
+                    sender.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.permission")));
+                }
+            }
+            // announce
+            else if(cmd.getLabel().equalsIgnoreCase("announce") || cmd.getLabel().equalsIgnoreCase("anc"))
+            {
+                if (sender.hasPermission("ic.announce"))
+                {
+                    String msg = "";
+
+                    for (int i = 0; i < args.length ; i++)
+                    {
+                        msg = msg + " " + args[i];
+                    }
+
+                    String format = ConfigManager.settings.getString("settings.announceFormat").replace("%message%", msg);
+                    if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI") == true)
+                    {
+                        format = PlaceholderAPI.setPlaceholders(((Player) sender).getPlayer(), format);
+                    }
+                    Bukkit.broadcastMessage(IridiumColorAPI.process(format));
                 }
                 else
                 {
@@ -277,6 +303,7 @@ public class commands implements CommandExecutor
             // reload config
             if (cmd.getLabel().equalsIgnoreCase("ic-reload") || cmd.getLabel().equalsIgnoreCase("infinitychat-reload"))
             {
+                run.versionUpdate();
                 ConfigManager.ReloadConfig();
                 ConfigManager.ReloadConfig(); sender.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.pluginReload")));
             }

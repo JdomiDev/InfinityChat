@@ -1,5 +1,5 @@
 # Made with <3 by Jdomi
-# InfinityChat 1.4.0
+# Config originally created by InfinityChat 1.7.0
 #
 #  ╭━━╮╱╱╭━╮╱╱╱╱╭╮╱╱╱╱╭━━━┳╮╱╱╱╱╭╮
 #  ╰┫┣╯╱╱┃╭╯╱╱╱╭╯╰╮╱╱╱┃╭━╮┃┃╱╱╱╭╯╰╮
@@ -18,49 +18,62 @@
 
 # Permissions e.g. the permission with this would be message.owner
 
-plugin-prefix: "<GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » "
+plugin-prefix: <GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » &f
 
 settings:
-  debugMode: "false"
-  updateChecking: "true"
-  chatFormatting: "true"
+  debugMode: false
+  updateChecking: true
+  chatFormatting: true
   # Chat - Moderation
-  hexChat: "true"
-  antiSwear: "true"
-  antiChatRepeat: "true"
-  chatCooldown: "true"
-  chatCooldownTime: "3"
+  hexChat: true
+  antiSwear: true
+  antiChatRepeat: true
+  chatCooldown: true
+  chatCooldownTime: 3
   # Chat - Customization
-  joinFormat: "true"
-  leaveFormat: "true"
-  motdDelayTime: "3"
-  motd: "true"
+  joinFormat: true
+  leaveFormat: true
+  motdDelayTime: 3
+  motd: true
+  announceFormat: <GRADIENT:e34034>[ANNOUNCEMENT]</GRADIENT:e0af26><GRADIENT:b2de43>%message%</GRADIENT:49d1cf>
   # Normal Chat
-  chatFormat: "%prefix%&7%player_name% &b%arrow% &7%message%"
-  noGroupChatFormat: "&7%player_name% &b%arrow% &7%message%"
+  chatFormat: <SOLID:FFFFFF>&7%prefix%&7%player_name% &b%arrow% &7%message%
+  noGroupChatFormat: <SOLID:FFFFFF>&7%player_name% &b%arrow% &7%message%
   # Permission
-  permPrefix: "message"
+  permPrefix: message
   # Staff Chat
-  staffChatFormat: "<GRADIENT:a31d00>[ICStaff]</GRADIENT:ff2d00>&7 %prefix%&8%player_name%&b %arrow%&7%message%"
-  noGroupStaffChatFormat: "<GRADIENT:a31d00>[ICStaff]</GRADIENT:ff2d00>&7 &8%player_name%&b %arrow%&7%message%"
+  staffChatFormat: <GRADIENT:a31d00>[ICStaff]</GRADIENT:ff2d00>&7 %prefix%&8%player_name%&b %arrow%&7%message%
+  noGroupStaffChatFormat: <GRADIENT:a31d00>[ICStaff]</GRADIENT:ff2d00>&7 &8%player_name%&b %arrow%&7%message%
   # Local Chat
   localChat:
-    enabled: "true"
-    forceLocalChat: "false"
-    localChatDistance: "500"
-    localChatFormat: "<GRADIENT:b3b300>[LOCAL]</GRADIENT:ffffff>&7 %prefix%&8%player_name%&b %arrow%&7%message%"
-    noGroupLocalChatFormat: "<GRADIENT:b3b300>[LOCAL]</GRADIENT:ffffff>&7 &8%player_name%&b %arrow%&7%message%"
+    enabled: true
+    forceLocalChat: false
+    localChatDistance: 500
+    localChatFormat: <GRADIENT:b3b300>[LOCAL]</GRADIENT:ffffff>&7 %prefix%&8%player_name%&b %arrow%&7%message%
+    noGroupLocalChatFormat: <GRADIENT:b3b300>[LOCAL]</GRADIENT:ffffff>&7 &8%player_name%&b %arrow%&7%message%
   # Fun Customisation
   joinSound:
-    enabled: "true"
-    delay: "3"
-    sound: "ENTITY_PLAYER_LEVELUP"
+    enabled: true
+    global: true
+    delay: 3
+    sound: ENTITY_PLAYER_LEVELUP
+  leaveSound:
+    enabled: true
+    global: true
+    delay: 3
+    sound: ENTITY_VILLAGER_HURT
   joinParticle:
-    enabled: "true"
-    delay: "3"
-    particle: "CRIT"
-    multiplier: "2"
+    enabled: true
+    delay: 3
+    particle: CRIT
+    multiplier: 2
+  autoAnnouncements:
+    enabled: true
+    interval: 10
+    random: false
+    announcmentLines:
+      - "&7%prefix%&7 Download <RAINBOW1>InfintyChat</RAINBOW> at &chttps://modrinth.com/plugin/infinitychat"
+      - "&7%prefix%&7 Thanks for using <RAINBOW1>InfintyChat</RAINBOW>"
+      - "&7%prefix%&7 This server is running <RAINBOW1>InfintyChat</RAINBOW>"
 
-server-version: "none"
-plugin-version: "none"
-last-plugin-version: "none"
+depend-update: true

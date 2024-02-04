@@ -1,6 +1,6 @@
 main: me.jdomi.chat.main
 name: InfinityChat
-version: 1.6.0
+version: 1.6.1
 author: Jdomi
 api-version: '1.20'
 softdepend:
@@ -17,9 +17,12 @@ commands:
     s: { description: 'Staff Chat' }
     local: { description: 'Local Chat' }
     l: { description: 'Local Chat' }
+    announce: { description: 'Announce' }
+    anc: { description: 'Announce' }
 permissions:
     ic.reload: { description: 'Access for /ic-reload' }
     ic.cc: { description: 'Access for /cc' }
     ic.bypass: { description: 'Bypass the chat spam filter' }
     ic.placeholderChat: { description: 'Allow chat placeholders'}
     ic.staff: { description: 'Staff chat' }
+    ic.announce: { description: 'Access to /announce'}
