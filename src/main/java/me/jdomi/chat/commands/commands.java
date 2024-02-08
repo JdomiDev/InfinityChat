@@ -14,8 +14,9 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import java.io.Console;
 import java.util.Set;
+
+import static me.jdomi.chat.api.config.ConfigManager.console;
 
 
 public class commands implements CommandExecutor
@@ -31,8 +32,8 @@ public class commands implements CommandExecutor
             {
                 if (sender.hasPermission("ic.reload"))
                 {
-                    run.versionUpdate();
-                    ConfigManager.ReloadConfig(); sender.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.pluginReload")));
+                    ConfigManager.ReloadConfig();
+                    sender.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.pluginReload")));
                 }
                 else
                 {
@@ -44,19 +45,26 @@ public class commands implements CommandExecutor
             {
                 if (sender.hasPermission("ic.announce"))
                 {
-                    String msg = "";
-
-                    for (int i = 0; i < args.length ; i++)
+                    try
                     {
-                        msg = msg + " " + args[i];
-                    }
+                        String msg = "";
 
-                    String format = ConfigManager.settings.getString("settings.announceFormat").replace("%message%", msg);
-                    if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI") == true)
-                    {
-                        format = PlaceholderAPI.setPlaceholders(((Player) sender).getPlayer(), format);
+                        for (int i = 0; i < args.length ; i++)
+                        {
+                            msg = msg + " " + args[i];
+                        }
+
+                        String format = ConfigManager.settings.getString("settings.announceFormat").replace("%message%", msg);
+                        if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI") == true)
+                        {
+                            format = PlaceholderAPI.setPlaceholders(((Player) sender).getPlayer(), format);
+                        }
+                        Bukkit.broadcastMessage(IridiumColorAPI.process(format));
                     }
-                    Bukkit.broadcastMessage(IridiumColorAPI.process(format));
+                    catch (Exception ex)
+                    {
+                        console.sendMessage(IridiumColorAPI.process("&4Someone is feeling cheeky"));
+                    }
                 }
                 else
                 {
@@ -100,109 +108,117 @@ public class commands implements CommandExecutor
                 sender.sendMessage(" ");
                 sender.sendMessage(" ");
             }
+            // staff chat
             else if (cmd.getLabel().equalsIgnoreCase("staff") || cmd.getLabel().equalsIgnoreCase("s"))
             {
                 if(sender.hasPermission("ic.staff") || sender.isOp())
                 {
-                    if(args.length == 0)
+                    try
                     {
-                        sender.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.staffChatArgs")));
+                        if(args.length == 0)
+                        {
+                            sender.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.staffChatArgs")));
+                        }
+                        else
+                        {
+                            String msg = "";
+                            for (int i = 0; i < args.length ; i++)
+                            {
+                                msg = msg + " " + args[i];
+                            }
+
+                            Set<String> groupsList = ConfigManager.groups.getConfigurationSection("groups").getKeys(false);
+                            int n1 = groupsList.size();
+                            int n2 = 0;
+
+                            for (String groups : groupsList)
+                            {
+                                n2++;
+                                Permission perm = new Permission(ConfigManager.settings.getString("settings.permPrefix") + "." + groups, PermissionDefault.FALSE);
+                                // groups
+                                if (sender.hasPermission(perm))
+                                {
+                                    //papi
+                                    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
+                                    {
+                                        String format = ConfigManager.settings.getString("settings.staffChatFormat");
+                                        format= PlaceholderAPI.setPlaceholders(((Player) sender).getPlayer(), format);
+                                        format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
+                                        format = format.replace("%player_name%", ((Player) sender).getPlayer().getName());
+                                        format = format.replace("%arrow%", "»");
+                                        format = format.replace("%message%", msg);
+                                        for(Player player : Bukkit.getServer().getOnlinePlayers())
+                                        {
+                                            if(player.hasPermission("ic.staff") || player.isOp())
+                                            {
+                                                player.sendMessage(IridiumColorAPI.process(format));
+                                            }
+                                        }
+                                        break;
+                                    }
+                                    //nopapi
+                                    else
+                                    {
+                                        String format = ConfigManager.settings.getString("settings.staffChatFormat");
+                                        format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
+                                        format = format.replace("%player_name%", ((Player) sender).getPlayer().getName());
+                                        format = format.replace("%arrow%", "»");
+                                        format = format.replace("%message%", msg);
+                                        for(Player player : Bukkit.getServer().getOnlinePlayers())
+                                        {
+                                            if(player.hasPermission("ic.staff") || player.isOp())
+                                            {
+                                                player.sendMessage(IridiumColorAPI.process(format));
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                                // no groups
+                                else if (n2 == n1)
+                                {
+                                    // papi
+                                    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
+                                    {
+                                        String format = PlaceholderAPI.setPlaceholders(((Player) sender).getPlayer(), ConfigManager.settings.getString("settings.noGroupStaffChatFormat"));
+                                        format = format.replace("%player_name%", sender.getName());
+                                        format = format.replace("%arrow%", "»");
+                                        format = format.replace("%message%", msg);
+
+                                        for(Player player : Bukkit.getServer().getOnlinePlayers())
+                                        {
+                                            if(player.hasPermission("ic.staff") || player.isOp())
+                                            {
+                                                player.sendMessage(IridiumColorAPI.process(format));
+                                            }
+                                        }
+                                        break;
+                                    }
+                                    // nopapi
+                                    else
+                                    {
+
+                                        String format = ConfigManager.settings.getString("settings.noGroupStaffChatFormat");
+                                        format = format.replace("%player_name%", sender.getName());
+                                        format = format.replace("%arrow%", "»");
+                                        format = format.replace("%message%", msg);
+
+                                        for(Player player : Bukkit.getServer().getOnlinePlayers())
+                                        {
+                                            if(player.hasPermission("ic.staff") || player.isOp())
+                                            {
+                                                player.sendMessage(IridiumColorAPI.process(format));
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        String msg = "";
-                        for (int i = 0; i < args.length ; i++)
-                        {
-                            msg = msg + " " + args[i];
-                        }
-
-                        Set<String> groupsList = ConfigManager.groups.getConfigurationSection("groups").getKeys(false);
-                        int n1 = groupsList.size();
-                        int n2 = 0;
-
-                        for (String groups : groupsList)
-                        {
-                            n2++;
-                            Permission perm = new Permission(ConfigManager.settings.getString("settings.permPrefix") + "." + groups, PermissionDefault.FALSE);
-                            // groups
-                            if (sender.hasPermission(perm))
-                            {
-                                //papi
-                                if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
-                                {
-                                    String format = ConfigManager.settings.getString("settings.staffChatFormat");
-                                    format= PlaceholderAPI.setPlaceholders(((Player) sender).getPlayer(), format);
-                                    format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
-                                    format = format.replace("%player_name%", ((Player) sender).getPlayer().getName());
-                                    format = format.replace("%arrow%", "»");
-                                    format = format.replace("%message%", msg);
-                                    for(Player player : Bukkit.getServer().getOnlinePlayers())
-                                    {
-                                        if(player.hasPermission("ic.staff") || player.isOp())
-                                        {
-                                            player.sendMessage(IridiumColorAPI.process(format));
-                                        }
-                                    }
-                                    break;
-                                }
-                                //nopapi
-                                else
-                                {
-                                    String format = ConfigManager.settings.getString("settings.staffChatFormat");
-                                    format = format.replace("%prefix%", ConfigManager.groups.getString("groups." + groups));
-                                    format = format.replace("%player_name%", ((Player) sender).getPlayer().getName());
-                                    format = format.replace("%arrow%", "»");
-                                    format = format.replace("%message%", msg);
-                                    for(Player player : Bukkit.getServer().getOnlinePlayers())
-                                    {
-                                        if(player.hasPermission("ic.staff") || player.isOp())
-                                        {
-                                            player.sendMessage(IridiumColorAPI.process(format));
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                            // no groups
-                            else if (n2 == n1)
-                            {
-                                // papi
-                                if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
-                                {
-                                    String format = PlaceholderAPI.setPlaceholders(((Player) sender).getPlayer(), ConfigManager.settings.getString("settings.noGroupStaffChatFormat"));
-                                    format = format.replace("%player_name%", sender.getName());
-                                    format = format.replace("%arrow%", "»");
-                                    format = format.replace("%message%", msg);
-
-                                    for(Player player : Bukkit.getServer().getOnlinePlayers())
-                                    {
-                                        if(player.hasPermission("ic.staff") || player.isOp())
-                                        {
-                                            player.sendMessage(IridiumColorAPI.process(format));
-                                        }
-                                    }
-                                    break;
-                                }
-                                // nopapi
-                                else
-                                {
-
-                                    String format = ConfigManager.settings.getString("settings.noGroupStaffChatFormat");
-                                    format = format.replace("%player_name%", sender.getName());
-                                    format = format.replace("%arrow%", "»");
-                                    format = format.replace("%message%", msg);
-
-                                    for(Player player : Bukkit.getServer().getOnlinePlayers())
-                                    {
-                                        if(player.hasPermission("ic.staff") || player.isOp())
-                                        {
-                                            player.sendMessage(IridiumColorAPI.process(format));
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }
+                        console.sendMessage(IridiumColorAPI.process("&4Someone is feeling cheeky"));
                     }
                 }
                 else
@@ -303,9 +319,8 @@ public class commands implements CommandExecutor
             // reload config
             if (cmd.getLabel().equalsIgnoreCase("ic-reload") || cmd.getLabel().equalsIgnoreCase("infinitychat-reload"))
             {
-                run.versionUpdate();
                 ConfigManager.ReloadConfig();
-                ConfigManager.ReloadConfig(); sender.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.pluginReload")));
+                sender.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.pluginReload")));
             }
             // clear chat
             else if (cmd.getLabel().equalsIgnoreCase("cc") || cmd.getLabel().equalsIgnoreCase("clearchat"))

@@ -5,13 +5,11 @@ import me.jdomi.chat.api.config.ConfigManager;
 import me.jdomi.chat.api.hex.IridiumColorAPI;
 import me.jdomi.chat.main;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import github.scarsz.discordsrv.util.DiscordUtil;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -24,6 +22,7 @@ public class onleave implements Listener
     @EventHandler
     public void onquit(PlayerQuitEvent e)
     {
+        // format leave?
         if (ConfigManager.settings.getBoolean("settings.leaveFormat"))
         {
             if (main.chat.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"))
@@ -74,14 +73,14 @@ public class onleave implements Listener
                     {
                         for(Player player : Bukkit.getServer().getOnlinePlayers())
                         {
-                            if(!(e.getPlayer() == player))
+                            if(!(e.getPlayer().getDisplayName().equals(player.getDisplayName())))
                             {
                                 player.playSound(player.getLocation(), Sound.valueOf(ConfigManager.settings.getString("settings.leaveSound.sound").toUpperCase()), 1.0F, 1.0F);
                             }
                         }
                     }
 
-                }).runTaskLater((Plugin)main.chat, cooldownSec+10);
+                }).runTaskLater((Plugin)main.chat, cooldownSec);
             }
             catch (Exception ex)
             {

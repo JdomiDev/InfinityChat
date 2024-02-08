@@ -3,7 +3,6 @@ package me.jdomi.chat.api.config;
 import java.io.File;
 import java.io.IOException;
 
-import me.jdomi.chat.api.hex.IridiumColorAPI;
 import me.jdomi.chat.main;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;

@@ -1,7 +1,6 @@
 package me.jdomi.chat.api.hex.patterns;
 
 import me.jdomi.chat.api.hex.IridiumColorAPI;
-import org.bukkit.Bukkit;
 
 import java.util.regex.Matcher;
 

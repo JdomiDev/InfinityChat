@@ -3,13 +3,11 @@ package me.jdomi.chat.listeners;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.jdomi.chat.api.config.ConfigManager;
 import me.jdomi.chat.api.hex.IridiumColorAPI;
 import me.jdomi.chat.main;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -25,6 +23,8 @@ public class onchat implements Listener
 {
     ArrayList<Player> cooldown = new ArrayList<>();
 
+    HashMap<Player, String> previousMessages = new HashMap<>();
+
     main plugin;
 
     private ConsoleCommandSender console = main.chat.getServer().getConsoleSender();
@@ -32,7 +32,7 @@ public class onchat implements Listener
 
     public final Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
 
-    public void sendChat(Player sender, String message)
+    public void sendChat(Player sender, String message, AsyncPlayerChatEvent e)
     {
         boolean forceLocalChat;
         if(ConfigManager.settings.getBoolean("settings.localChat.forceLocalChat"))
@@ -59,7 +59,16 @@ public class onchat implements Listener
         }
         else
         {
-            Bukkit.broadcastMessage(IridiumColorAPI.process(message));
+            if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
+            {
+                e.setFormat(IridiumColorAPI.process(PlaceholderAPI.setPlaceholders(sender, message).replace("%","%%")));
+                //Bukkit.broadcastMessage(IridiumColorAPI.process(PlaceholderAPI.setPlaceholders(sender, message)));
+            }
+            else
+            {
+                e.setFormat(IridiumColorAPI.process(message.replace("%","%%")));
+                //Bukkit.broadcastMessage(IridiumColorAPI.process(message));
+            }
         }
     }
 
@@ -74,21 +83,19 @@ public class onchat implements Listener
 
         if (ConfigManager.settings.getBoolean("settings.antiChatRepeat"))
         {
-
-
-            HashMap<Player, String> previousMessages = new HashMap<>();
-            if (previousMessages.containsValue(player))
+            if (!player.hasPermission("ic.cooldown.bypass"))
             {
-                if (message.equalsIgnoreCase(previousMessages.get(player)))
+                if (previousMessages.containsKey(player))
                 {
-
-
-                    player.sendMessage(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.spam"));
-                    e.setCancelled(true);
+                    if (message.equalsIgnoreCase(previousMessages.get(player)))
+                    {
+                        player.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.spam")));
+                        e.setCancelled(true);
+                    }
                 }
-            }
 
-            previousMessages.put(player, message);
+                previousMessages.put(player, message);
+            }
         }
         // cooldown
         if (ConfigManager.settings.getBoolean("settings.chatCooldown"))
@@ -108,16 +115,19 @@ public class onchat implements Listener
         // antiswear
         if (ConfigManager.settings.getBoolean("settings.antiSwear"))
         {
-            for (String blockedWord : ConfigManager.words.getStringList("censored-words"))
+            if (!player.hasPermission("ic.cooldown.bypass"))
             {
-
-                if (message.contains(blockedWord.toLowerCase()))
+                for (String blockedWord : ConfigManager.words.getStringList("censored-words"))
                 {
 
-                    player.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.swear")));
-                    e.setCancelled(true);
+                    if (message.contains(blockedWord.toLowerCase()))
+                    {
 
-                    break;
+                        player.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.swear")));
+                        e.setCancelled(true);
+
+                        break;
+                    }
                 }
             }
         }
@@ -162,12 +172,12 @@ public class onchat implements Listener
                         if(e.getPlayer().hasPermission("ic.placeholderChat") && e.isCancelled() == false)
                         {
                             format = PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
-                            sendChat(e.getPlayer(), format);
+                            sendChat(e.getPlayer(), format, e);
                             break;
                         }
                         else if(!e.isCancelled())
                         {
-                            sendChat(e.getPlayer(), format);
+                            sendChat(e.getPlayer(), format, e);
                             break;
                         }
                     }
@@ -178,7 +188,7 @@ public class onchat implements Listener
                         format = format.replace("%player_name%", e.getPlayer().getName());
                         format = format.replace("%arrow%", "»");
                         format = format.replace("%message%", e.getMessage());
-                        sendChat(e.getPlayer(), format);
+                        sendChat(e.getPlayer(), format, e);
                         break;
                     }
                 }
@@ -206,12 +216,12 @@ public class onchat implements Listener
                         if(e.getPlayer().hasPermission("ic.placeholderChat") && e.isCancelled() == false)
                         {
                             format = PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
-                            sendChat(e.getPlayer(), format);
+                            sendChat(e.getPlayer(), format, e);
                             break;
                         }
                         else if(!e.isCancelled())
                         {
-                            sendChat(e.getPlayer(), format);
+                            sendChat(e.getPlayer(), format, e);
                             break;
                         }
 
@@ -224,14 +234,14 @@ public class onchat implements Listener
                         format = format.replace("%message%", e.getMessage());
                         if(!e.isCancelled())
                         {
-                            sendChat(e.getPlayer(), format);
+                            sendChat(e.getPlayer(), format, e);
                             break;
                         }
                     }
                 }
                 perm = null;
             }
-            e.setCancelled(true);
+            //e.setCancelled(true);
         }
 
         if (ConfigManager.settings.getBoolean("settings.chatCooldown"))

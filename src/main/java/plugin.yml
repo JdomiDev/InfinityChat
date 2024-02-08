@@ -1,6 +1,6 @@
 main: me.jdomi.chat.main
 name: InfinityChat
-version: 1.6.1
+version: 1.8.0
 author: Jdomi
 api-version: '1.20'
 softdepend:

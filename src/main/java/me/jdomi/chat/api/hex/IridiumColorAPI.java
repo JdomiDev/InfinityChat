@@ -6,7 +6,6 @@ import me.jdomi.chat.api.hex.patterns.Pattern;
 import me.jdomi.chat.api.hex.patterns.RainbowPattern;
 import me.jdomi.chat.api.hex.patterns.SolidPattern;
 import net.md_5.bungee.api.ChatColor;
-//import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 
 import javax.annotation.Nonnull;

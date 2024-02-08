@@ -1,6 +1,5 @@
 package me.jdomi.chat.listeners;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.jdomi.chat.api.config.ConfigManager;
 import me.jdomi.chat.api.hex.IridiumColorAPI;
 import me.jdomi.chat.commands.commands;
@@ -42,7 +41,6 @@ public class run {
         ConfigManager.console.sendMessage("   ");
         ConfigManager.console.sendMessage("   ");
         ConfigManager.console.sendMessage(IridiumColorAPI.process("<GRADIENT:fcc600>https://modrinth.com/plugin/infinitychat</GRADIENT:a4fc00>"));
-        ConfigManager.console.sendMessage(IridiumColorAPI.process("<GRADIENT:fcc600>https://polymart.org/resource/infinitychat-chat-plugin.1141</GRADIENT:a4fc00>"));
         ConfigManager.console.sendMessage("   ");
         ConfigManager.console.sendMessage("   ");
     }
@@ -90,7 +88,7 @@ public class run {
         main.pm.registerEvents(new onjoin(), (Plugin) main.chat);
     }
 
-
+    // this updates config from old plugin version
     public static void versionUpdate()
     {
         if(!ConfigManager.settings.isSet("depend-update"))
@@ -113,10 +111,22 @@ public class run {
             ConfigManager.settings.set("settings.leaveSound.sound", "ENTITY_VILLAGER_HURT");
             ConfigManager.settings.set("settings.leaveSound.delay", 3);
         }
+        if(!ConfigManager.settings.isSet("settings.autoAnnouncements.enabled"))
+        {
+            ArrayList<String> List = new ArrayList<String>();
+            List.add("&7%prefix%&7Download <RAINBOW1>InfintyChat</RAINBOW>&7 at &7https://modrinth.com/plugin/infinitychat");
+            List.add("&7%prefix%&7Thanks for using <RAINBOW1>InfintyChat</RAINBOW>");
+            List.add("&7%prefix%&7This server is running <RAINBOW1>InfintyChat</RAINBOW>");
+
+            ConfigManager.settings.set("settings.autoAnnouncements.enabled", true);
+            ConfigManager.settings.set("settings.autoAnnouncements.random", false);
+            ConfigManager.settings.set("settings.autoAnnouncements.interval", 120);
+            ConfigManager.settings.set("settings.autoAnnouncements.announcmentLines", List);
+        }
 
         ConfigManager.saveMessagesGroups();
     }
-
+    // check and tells admins that there is a new plugin version
     public static void updateCheck()
     {
         if (ConfigManager.settings.getString("settings.updateChecking").equalsIgnoreCase("true")) {
@@ -146,7 +156,7 @@ public class run {
             }
         }
     }
-
+    // download needed papi extensions
     public static void placeHolderUpdate()
     {
         List<String> extensions = List.of("Player", "PlayerList", "Server", "Statistic");

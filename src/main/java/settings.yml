@@ -1,5 +1,5 @@
 # Made with <3 by Jdomi
-# Config originally created by InfinityChat 1.7.0
+# Config originally created by InfinityChat 1.8.0
 #
 #  ╭━━╮╱╱╭━╮╱╱╱╱╭╮╱╱╱╱╭━━━┳╮╱╱╱╱╭╮
 #  ╰┫┣╯╱╱┃╭╯╱╱╱╭╯╰╮╱╱╱┃╭━╮┃┃╱╱╱╭╯╰╮
@@ -18,7 +18,7 @@
 
 # Permissions e.g. the permission with this would be message.owner
 
-plugin-prefix: <GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » &f
+plugin-prefix: '<GRADIENT:fcc600>InfinityChat</GRADIENT:a4fc00>&7 » &f'
 
 settings:
   debugMode: false
@@ -69,11 +69,11 @@ settings:
     multiplier: 2
   autoAnnouncements:
     enabled: true
-    interval: 10
+    interval: 120
     random: false
     announcmentLines:
-      - "&7%prefix%&7 Download <RAINBOW1>InfintyChat</RAINBOW> at &chttps://modrinth.com/plugin/infinitychat"
-      - "&7%prefix%&7 Thanks for using <RAINBOW1>InfintyChat</RAINBOW>"
-      - "&7%prefix%&7 This server is running <RAINBOW1>InfintyChat</RAINBOW>"
+      - '&7%prefix%&7Download <RAINBOW1>InfintyChat</RAINBOW>&7 at &7https://modrinth.com/plugin/infinitychat'
+      - '&7%prefix%&7Thanks for using <RAINBOW1>InfintyChat</RAINBOW>'
+      - '&7%prefix%&7This server is running <RAINBOW1>InfintyChat</RAINBOW>'
 
 depend-update: true

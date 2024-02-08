@@ -83,7 +83,7 @@ public class onjoin implements Listener
         // join sound
         if (ConfigManager.settings.getBoolean("settings.joinSound.enabled"))
         {
-            // global
+            // no global
             if(!ConfigManager.settings.getBoolean("settings.joinSound.global"))
             {
                 try
@@ -94,7 +94,6 @@ public class onjoin implements Listener
                     {
                         public void run()
                         {
-                            Bukkit.broadcastMessage("nigg2a");
                             e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.valueOf(ConfigManager.settings.getString("settings.joinSound.sound").toUpperCase()), 1.0F, 1.0F);
                         }
                     }).runTaskLater((Plugin)main.chat, cooldownSec);
@@ -104,7 +103,7 @@ public class onjoin implements Listener
                     console.sendMessage(IridiumColorAPI.process("&4Error with sound"));
                 }
             }
-            // no global
+            // global
             else if(ConfigManager.settings.getBoolean("settings.joinSound.global"))
             {
                 try
