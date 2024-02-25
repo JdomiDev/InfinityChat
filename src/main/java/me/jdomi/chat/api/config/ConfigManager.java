@@ -2,8 +2,13 @@ package me.jdomi.chat.api.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
 
 import me.jdomi.chat.main;
+import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -34,6 +39,16 @@ public class ConfigManager
     public static File settingsF = new File(main.chat.getDataFolder().getAbsolutePath(), "settings.yml");
     public static FileConfiguration settings = YamlConfiguration.loadConfiguration(settingsF);
 
+    public static File muteF = new File(main.chat.getDataFolder().getAbsolutePath(), "mute.yml");
+    public static FileConfiguration mute = YamlConfiguration.loadConfiguration(settingsF);
+
+    public static FileConfiguration essentials;
+    public static File essentialsF;
+
+
+
+    public static List<String> mutes = new ArrayList<>(Arrays.asList());
+
 
     public static void saveMessagesGroups()
     {
@@ -51,13 +66,32 @@ public class ConfigManager
             settings.save(settingsF);
             settings = YamlConfiguration.loadConfiguration(settingsF);
 
+
+            mute.save(muteF);
+            mute = YamlConfiguration.loadConfiguration(muteF);
+
+
+        }
+        catch (IOException iOException)
+        {
+            console.sendMessage("&4Error Plugin Config Cant Be Saved. The plugin will not work correctly!");
+        }
+
+    }
+    public static void saveMute()
+    {
+        try
+        {
+            mute.save(muteF);
+            mute = YamlConfiguration.loadConfiguration(muteF);
+
+
         }
         catch (IOException iOException)
         {
             console.sendMessage("&4Error Plugin Config Cant Be Saved. The plugin will not work correctly!");
         }
     }
-
 
 
 
@@ -99,6 +133,14 @@ public class ConfigManager
         {
             main.chat.saveResource("settings.yml", false);
         }
+        if (muteF == null)
+        {
+            muteF = new File(main.chat.getDataFolder(), "mute.yml");
+        }
+        if (!muteF.exists())
+        {
+            main.chat.saveResource("mute.yml", false);
+        }
     }
 
 
@@ -109,6 +151,7 @@ public class ConfigManager
         msg = null;
         words = null;
         groups = null;
+        mute = null;
 
         settings = YamlConfiguration.loadConfiguration(settingsF);
 
@@ -117,5 +160,32 @@ public class ConfigManager
         msg = YamlConfiguration.loadConfiguration(msgF);
 
         groups = YamlConfiguration.loadConfiguration(groupsF);
+
+        mute = YamlConfiguration.loadConfiguration(muteF);
+    }
+
+    public static void SetEssentials()
+    {
+        if(Bukkit.getPluginManager().getPlugin("EssentialsDiscord").isEnabled() && settings.getBoolean("settings.essentialsDiscordStaffChannel.enabled"))
+        {
+            try
+            {
+                essentialsF = new File(Bukkit.getPluginManager().getPlugin("EssentialsDiscord").getDataFolder().getAbsolutePath(), "config.yml");
+                essentials = YamlConfiguration.loadConfiguration(essentialsF);
+                if(!essentials.isSet("channels.staff-channel"))
+                {
+                    essentials.set("channels.staff-channel", 0);
+                }
+                if(!essentials.isSet("message-types.staff"))
+                {
+                    essentials.set("message-types.staff", "staff-channel");
+                }
+                essentials.save(essentialsF);
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
     }
 }

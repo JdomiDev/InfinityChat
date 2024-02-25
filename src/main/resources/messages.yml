@@ -1,5 +1,5 @@
 # Made with <3 by Jdomi
-# Config originally created by InfinityChat 1.8.0
+# Config originally created by InfinityChat 1.9.0
 #
 #  ╭━━╮╱╱╭━╮╱╱╱╱╭╮╱╱╱╱╭━━━┳╮╱╱╱╱╭╮
 #  ╰┫┣╯╱╱┃╭╯╱╱╱╭╯╰╮╱╱╱┃╭━╮┃┃╱╱╱╭╯╰╮
@@ -11,7 +11,7 @@
 #  ╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╰━━╯
 
 messages:
-  swear: "&cPlease don't swear"
+  swear: "&cPlease don't swear. The word&f '%word%'&c is not allowed in chat!"
   spam: "&cPlease don't spam"
   permission: "&cYou don't have permission to do this."
   clearChat: "&a%player_name% &7cleared the chat."
@@ -20,7 +20,16 @@ messages:
   pluginReload: "&aPlugin Reloaded"
   updateAvailable: "&cupdate available!"
   staffChatArgs: "&cUsage: /staff <message here>"
+  announceArgs: "&cUsage: /announce <message here>"
+  unmuteArgs: "&cUsage: /unmute <username here>"
+  muteArgs: "&cUsage: /mute <username here>"
+  localChatArgs: "&cUsage: /local <message here>"
   featureDisabled: "&cSorry this feature is disabled by the owner of the server!"
+  mute: "&aYou have muted %player% successfully"
+  unmute: "&aYou have unmuted %player% successfully"
+  playerIsMuted: "&cYou cannot type in chat because you are muted!"
+  alreadyUnmute: "&cPlayer %player% is not muted!"
+  alreadyMute: "&cPlayer %player% is muted already!"
 motdLines:
   - "&7Welcome &a%player_name%"
   - "&7There are &e%server_online% &7online players out of &e %server_max_players%"

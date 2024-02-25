@@ -8,6 +8,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import me.jdomi.chat.api.config.ConfigManager;
 import me.jdomi.chat.api.hex.IridiumColorAPI;
 import me.jdomi.chat.main;
+import net.essentialsx.api.v2.services.discord.DiscordService;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -62,12 +63,10 @@ public class onchat implements Listener
             if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
             {
                 e.setFormat(IridiumColorAPI.process(PlaceholderAPI.setPlaceholders(sender, message).replace("%","%%")));
-                //Bukkit.broadcastMessage(IridiumColorAPI.process(PlaceholderAPI.setPlaceholders(sender, message)));
             }
             else
             {
                 e.setFormat(IridiumColorAPI.process(message.replace("%","%%")));
-                //Bukkit.broadcastMessage(IridiumColorAPI.process(message));
             }
         }
     }
@@ -75,32 +74,118 @@ public class onchat implements Listener
     @EventHandler
     public void chatformat(AsyncPlayerChatEvent e)
     {
+        boolean isMuted = false;
         final Player player = e.getPlayer();
 
         String message = e.getMessage().toLowerCase();
-
-        // anti spam
-
-        if (ConfigManager.settings.getBoolean("settings.antiChatRepeat"))
+        String messageC = e.getMessage();
+        // ismuted
+        if(ConfigManager.mute.isSet("muted-players."+e.getPlayer().getName()))
         {
-            if (!player.hasPermission("ic.cooldown.bypass"))
+            if(ConfigManager.mute.getBoolean("muted-players."+e.getPlayer().getName()))
             {
-                if (previousMessages.containsKey(player))
+                player.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.playerIsMuted")));
+                e.setCancelled(true);
+                isMuted = true;
+            }
+        }
+        // anti shout
+        if (ConfigManager.settings.getBoolean("settings.antiCapsLockSpam"))
+        {
+            if(!player.hasPermission("ic.shout") || !player.isOp())
+            {
+                String regex = "[^a-zA-Z0-9\\s]";
+                String msg = messageC.replace(" ", "");
+                msg = msg.replaceAll(regex,"");
+
+                int charCount = msg.length();
+                int capLetCound = 0;
+
+
+                for (int i = 0; i < charCount; i++)
                 {
-                    if (message.equalsIgnoreCase(previousMessages.get(player)))
+                    char currentChar = msg.charAt(i);
+                    if(Character.isUpperCase(currentChar))
                     {
-                        player.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.spam")));
-                        e.setCancelled(true);
+                        capLetCound++;
                     }
                 }
+                double percentage = (double) capLetCound / charCount * 100;
 
-                previousMessages.put(player, message);
+                if(percentage >= ConfigManager.settings.getInt("settings.antiCapsLockSpamPercentage"))
+                {
+                    messageC = messageC.toLowerCase();
+                    messageC = messageC.substring(0,1).toUpperCase() + messageC.substring(1);
+                    e.setMessage(messageC);
+                }
+            }
+        }
+
+        // antiswear
+        if (ConfigManager.settings.getBoolean("settings.antiSwear") && !isMuted)
+        {
+            if (!player.hasPermission("ic.cooldown.bypass") || !player.isOp())
+            {
+                for (String blockedWord : ConfigManager.words.getStringList("censored-words"))
+                {
+
+
+                    if(message.contains(blockedWord.toLowerCase()))
+                    {
+                        boolean nextSpaceCheck = false;
+                        boolean prevSpaceCheck = false;
+
+                        int sub = message.indexOf(blockedWord.toLowerCase());
+
+                        char nextLetter;
+                        char previousLetter;
+
+                        //prev char check
+                        if(sub > 0)
+                        {
+                            previousLetter = message.charAt(sub - 1);
+                            if(previousLetter == ' ')
+                            {
+                                prevSpaceCheck = true;
+                            }
+                        }
+                        else
+                        {
+                            prevSpaceCheck = true;
+                        }
+
+
+                        //next char check
+                        if(sub+blockedWord.length() < message.length())
+                        {
+                            nextLetter = message.charAt(sub + blockedWord.length());
+                            if(nextLetter == ' ')
+                            {
+                                nextSpaceCheck = true;
+                            }
+                        }
+                        else
+                        {
+                            nextSpaceCheck = true;
+                        }
+
+
+                        // check if it no letter behind or front
+                        if (nextSpaceCheck && prevSpaceCheck)
+                        {
+                            player.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.swear").replace("%word%", blockedWord.toLowerCase())));
+                            e.setCancelled(true);
+                            isMuted = true;
+                            break;
+                        }
+                    }
+                }
             }
         }
         // cooldown
-        if (ConfigManager.settings.getBoolean("settings.chatCooldown"))
+        if (ConfigManager.settings.getBoolean("settings.chatCooldown") && !isMuted)
         {
-            if (!player.hasPermission("ic.cooldown.bypass"))
+            if (!player.hasPermission("ic.cooldown.bypass") || !player.isOp())
             {
                 if (this.cooldown.contains(player))
                 {
@@ -112,23 +197,21 @@ public class onchat implements Listener
                 }
             }
         }
-        // antiswear
-        if (ConfigManager.settings.getBoolean("settings.antiSwear"))
+        // anti spam
+        if (ConfigManager.settings.getBoolean("settings.antiChatRepeat") && !isMuted)
         {
-            if (!player.hasPermission("ic.cooldown.bypass"))
+            if (!player.hasPermission("ic.cooldown.bypass") || !player.isOp())
             {
-                for (String blockedWord : ConfigManager.words.getStringList("censored-words"))
+                if (previousMessages.containsKey(player))
                 {
-
-                    if (message.contains(blockedWord.toLowerCase()))
+                    if (message.equalsIgnoreCase(previousMessages.get(player)))
                     {
-
-                        player.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.swear")));
+                        player.sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + ConfigManager.msg.getString("messages.spam")));
                         e.setCancelled(true);
-
-                        break;
                     }
                 }
+
+                previousMessages.put(player, message);
             }
         }
         // chat formatting
@@ -243,7 +326,6 @@ public class onchat implements Listener
             }
             //e.setCancelled(true);
         }
-
         if (ConfigManager.settings.getBoolean("settings.chatCooldown"))
         {
 

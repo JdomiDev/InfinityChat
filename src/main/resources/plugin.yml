@@ -1,11 +1,12 @@
 main: me.jdomi.chat.main
 name: InfinityChat
-version: 1.8.0
+version: 1.9.0
 author: Jdomi
 api-version: '1.20'
 softdepend:
     - PlaceholderAPI
     - DiscordSRV
+    - EssentialsDiscord
 commands:
     ic-reload: { description: 'Reloads the configuration' }
     infinitychat-reload: { description: 'Reloads the configuration' }
@@ -19,6 +20,10 @@ commands:
     l: { description: 'Local Chat' }
     announce: { description: 'Announce' }
     anc: { description: 'Announce' }
+    mute: { description: 'Mute' }
+    m: { description: 'Mute' }
+    unmute: { description: 'Unmute' }
+    um: { description: 'Unmute' }
 permissions:
     ic.reload: { description: 'Access for /ic-reload' }
     ic.cc: { description: 'Access for /cc' }
@@ -26,3 +31,5 @@ permissions:
     ic.placeholderChat: { description: 'Allow chat placeholders'}
     ic.staff: { description: 'Staff chat' }
     ic.announce: { description: 'Access to /announce'}
+    ic.mute: {'Access to /mute'}
+    ic.shout: {'Allows you to bypass the capital letter limit'}

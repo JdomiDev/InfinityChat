@@ -82,6 +82,10 @@ public class run {
         main.chat.getCommand("s").setExecutor((CommandExecutor) new commands(main.chat));
         main.chat.getCommand("local").setExecutor((CommandExecutor) new commands(main.chat));
         main.chat.getCommand("l").setExecutor((CommandExecutor) new commands(main.chat));
+        main.chat.getCommand("mute").setExecutor((CommandExecutor) new commands(main.chat));
+        main.chat.getCommand("m").setExecutor((CommandExecutor) new commands(main.chat));
+        main.chat.getCommand("unmute").setExecutor((CommandExecutor) new commands(main.chat));
+        main.chat.getCommand("um").setExecutor((CommandExecutor) new commands(main.chat));
         main.pm.registerEvents((Listener) main.chat, (Plugin) main.chat);
         main.pm.registerEvents(new onchat(), (Plugin) main.chat);
         main.pm.registerEvents(new onleave(), (Plugin) main.chat);
@@ -91,19 +95,77 @@ public class run {
     // this updates config from old plugin version
     public static void versionUpdate()
     {
+        //anc
+        if(!ConfigManager.msg.isSet("messages.announceArgs"))
+        {
+            ConfigManager.msg.set("messages.announceArgs", "&cUsage: /announce <message here>");
+        }
+        //um
+        if(!ConfigManager.msg.isSet("messages.unmuteArgs"))
+        {
+            ConfigManager.msg.set("messages.unmuteArgs", "&cUsage: /unmute <username here>");
+        }
+        //mute
+        if(!ConfigManager.msg.isSet("messages.muteArgs"))
+        {
+            ConfigManager.msg.set("messages.muteArgs", "&cUsage: /mute <username here>");
+        }
+        //local
+        if(!ConfigManager.msg.isSet("messages.localChatArgs"))
+        {
+            ConfigManager.msg.set("messages.localChatArgs", "&cUsage: /local <message here>");
+        }
+        // anti shout
+        if(!ConfigManager.settings.isSet("settings.antiCapsLockSpam"))
+        {
+            ConfigManager.settings.set("settings.antiCapsLockSpam", true);
+        }
+        // anti shout %
+        if(!ConfigManager.settings.isSet("settings.antiCapsLockSpamPercentage"))
+        {
+            ConfigManager.settings.set("settings.antiCapsLockSpamPercentage", 100);
+        }
+        // depend update
         if(!ConfigManager.settings.isSet("depend-update"))
         {
             ConfigManager.settings.set("depend-update", true);
         }
-
+        // mute scsful msg
+        if(!ConfigManager.msg.isSet("messages.mute"))
+        {
+            ConfigManager.msg.set("messages.mute", "&aYou have muted %player% successfully");
+        }
+        // cant type in chat
+        if(!ConfigManager.msg.isSet("messages.playerIsMuted"))
+        {
+            ConfigManager.msg.set("messages.playerIsMuted", "&cYou cannot type in chat because you are muted!");
+        }
+        // unmute scsful msg
+        if(!ConfigManager.msg.isSet("messages.unmute"))
+        {
+            ConfigManager.msg.set("messages.unmute", "&aYou have unmuted %player% successfully");
+        }
+        // already unmute
+        if(!ConfigManager.msg.isSet("messages.alreadyUnmute"))
+        {
+            ConfigManager.msg.set("messages.alreadyUnmute", "&cPlayer %player% is not muted!");
+        }
+        // already muted
+        if(!ConfigManager.msg.isSet("messages.alreadyMute"))
+        {
+            ConfigManager.msg.set("messages.alreadyMute", "&cPlayer %player% is muted already!");
+        }
+        // global join sound
         if(!ConfigManager.settings.isSet("settings.joinSound.global"))
         {
             ConfigManager.settings.set("settings.joinSound.global", true);
         }
+        // announce format
         if(!ConfigManager.settings.isSet("settings.announceFormat"))
         {
             ConfigManager.settings.set("settings.announceFormat", "<GRADIENT:e34034>[ANNOUNCEMENT]</GRADIENT:e0af26><GRADIENT:b2de43>%message%</GRADIENT:49d1cf>");
         }
+        // leave sound
         if(!ConfigManager.settings.isSet("settings.leaveSound.enabled"))
         {
             ConfigManager.settings.set("settings.leaveSound.enabled", true);
@@ -111,6 +173,7 @@ public class run {
             ConfigManager.settings.set("settings.leaveSound.sound", "ENTITY_VILLAGER_HURT");
             ConfigManager.settings.set("settings.leaveSound.delay", 3);
         }
+        // auto announcements
         if(!ConfigManager.settings.isSet("settings.autoAnnouncements.enabled"))
         {
             ArrayList<String> List = new ArrayList<String>();
@@ -122,6 +185,11 @@ public class run {
             ConfigManager.settings.set("settings.autoAnnouncements.random", false);
             ConfigManager.settings.set("settings.autoAnnouncements.interval", 120);
             ConfigManager.settings.set("settings.autoAnnouncements.announcmentLines", List);
+        }
+        // essentials discord stuff
+        if(!ConfigManager.settings.isSet("settings.essentialsDiscordStaffChannel.enabled"))
+        {
+            ConfigManager.settings.set("settings.essentialsDiscordStaffChannel.enabled", false);
         }
 
         ConfigManager.saveMessagesGroups();

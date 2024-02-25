@@ -1,5 +1,5 @@
 # Made with <3 by Jdomi
-# Config originally created by InfinityChat 1.8.0
+# Config originally created by InfinityChat 1.9.0
 #
 #  ╭━━╮╱╱╭━╮╱╱╱╱╭╮╱╱╱╱╭━━━┳╮╱╱╱╱╭╮
 #  ╰┫┣╯╱╱┃╭╯╱╱╱╭╯╰╮╱╱╱┃╭━╮┃┃╱╱╱╭╯╰╮
@@ -10,12 +10,6 @@
 #  ╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭━╯┃
 #  ╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╰━━╯
 
-# Add as much as you want!!
-groups:
-  default: "<GRADIENT:00fcbd>Player</GRADIENT:00fcd6>&7 | &7"
-  default+: "<GRADIENT:00fc14>Player</GRADIENT:a3fc03>&c+&7 | &7"
-  default++: "<GRADIENT:fc9e00>Player</GRADIENT:fce300>&c++&7 | &7"
-  owner: "<SOLID:fc0054>Owner&7 | &7"
-  builder: "<GRADIENT:007175>Builder</GRADIENT:02e4eb>&7 | &7"
-  mvp: "<GRADIENT:00fcb2>MVP</GRADIENT:77fcc6>&7 | &7"
-  headbuilder: "<GRADIENT:fcc600>Headbuilder</GRADIENT:a4fc00>&7 | &7"
+muted-players:
+  Dream: true
+  MrBeast: true

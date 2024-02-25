@@ -1,5 +1,5 @@
 # Made with <3 by Jdomi
-# Config originally created by InfinityChat 1.8.0
+# Config originally created by InfinityChat 1.9.0
 #
 #  ╭━━╮╱╱╭━╮╱╱╱╱╭╮╱╱╱╱╭━━━┳╮╱╱╱╱╭╮
 #  ╰┫┣╯╱╱┃╭╯╱╱╱╭╯╰╮╱╱╱┃╭━╮┃┃╱╱╱╭╯╰╮
@@ -30,6 +30,8 @@ settings:
   antiChatRepeat: true
   chatCooldown: true
   chatCooldownTime: 3
+  antiCapsLockSpam: true
+  antiCapsLockSpamPercentage: 100
   # Chat - Customization
   joinFormat: true
   leaveFormat: true
@@ -75,5 +77,8 @@ settings:
       - '&7%prefix%&7Download <RAINBOW1>InfintyChat</RAINBOW>&7 at &7https://modrinth.com/plugin/infinitychat'
       - '&7%prefix%&7Thanks for using <RAINBOW1>InfintyChat</RAINBOW>'
       - '&7%prefix%&7This server is running <RAINBOW1>InfintyChat</RAINBOW>'
+  essentialsDiscordStaffChannel:
+    enabled: false
+
 
 depend-update: true
