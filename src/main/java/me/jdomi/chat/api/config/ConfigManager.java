@@ -2,10 +2,6 @@ package me.jdomi.chat.api.config;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
 
 import me.jdomi.chat.main;
 import org.bukkit.Bukkit;
@@ -16,7 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 
 
-public class ConfigManager
+public class configManager
 {
 
     public static main plugin;
@@ -45,9 +41,6 @@ public class ConfigManager
     public static FileConfiguration essentials;
     public static File essentialsF;
 
-
-
-    public static List<String> mutes = new ArrayList<>(Arrays.asList());
 
 
     public static void saveMessagesGroups()

@@ -2,7 +2,7 @@ package me.jdomi.chat.listeners;
 
 import java.util.List;
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.jdomi.chat.api.config.ConfigManager;
+import me.jdomi.chat.api.config.configManager;
 import me.jdomi.chat.api.hex.IridiumColorAPI;
 import me.jdomi.chat.main;
 import org.bukkit.Bukkit;
@@ -16,33 +16,31 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import static me.jdomi.chat.api.config.ConfigManager.console;
+import static me.jdomi.chat.api.config.configManager.console;
 
 
-public class onjoin implements Listener
+public class onJoin implements Listener
 {
-    main plugin;
-
     @EventHandler
     public void onjoin(final PlayerJoinEvent e)
     {
         // update check
-        if (ConfigManager.settings.getBoolean("settings.updateChecking") && (e.getPlayer().hasPermission("ic.*") || e.getPlayer().isOp()))
+        if (configManager.settings.getBoolean("settings.updateChecking") && (e.getPlayer().hasPermission("ic.*") || e.getPlayer().isOp()))
         {
             if (main.updateAvailable)
             {
-                e.getPlayer().sendMessage(IridiumColorAPI.process(ConfigManager.settings.getString("plugin-prefix") + "&cV" + main.updateVer + " "+ConfigManager.msg.getString("messages.updateAvailable")));
+                e.getPlayer().sendMessage(IridiumColorAPI.process(configManager.settings.getString("plugin-prefix") + "&cV" + main.updateVer + " "+ configManager.msg.getString("messages.updateAvailable")));
                 e.getPlayer().sendMessage(IridiumColorAPI.process("&chttps://modrinth.com/plugin/infinitychat/version/latest"));
             }
         }
         // particle
-        if (ConfigManager.settings.getBoolean("settings.joinParticle.enabled"))
+        if (configManager.settings.getBoolean("settings.joinParticle.enabled"))
         {
             try
             {
-                int cooldownSec = ConfigManager.settings.getInt("settings.joinParticle.delay") * 20;
-                int multiplier = ConfigManager.settings.getInt("settings.joinParticle.multiplier") * 20;
-                String particleType = ConfigManager.settings.getString("settings.joinParticle.particle").toUpperCase();
+                int cooldownSec = configManager.settings.getInt("settings.joinParticle.delay") * 20;
+                int multiplier = configManager.settings.getInt("settings.joinParticle.multiplier") * 20;
+                String particleType = configManager.settings.getString("settings.joinParticle.particle").toUpperCase();
 
                 (new BukkitRunnable()
                 {
@@ -59,13 +57,13 @@ public class onjoin implements Listener
             }
         }
         // join format
-        if (ConfigManager.settings.getBoolean("settings.joinFormat"))
+        if (configManager.settings.getBoolean("settings.formatting.joinFormat"))
         {
             if (main.chat.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"))
             {
                 e.setJoinMessage("");
 
-                String format = ConfigManager.msg.getString("messages.joinFormat");
+                String format = configManager.msg.getString("messages.joinFormat");
                 String replaced = PlaceholderAPI.setPlaceholders(e.getPlayer(), format);
 
                 Bukkit.broadcastMessage(IridiumColorAPI.process(replaced));
@@ -74,27 +72,27 @@ public class onjoin implements Listener
             {
                 e.setJoinMessage("");
 
-                String format = ConfigManager.msg.getString("messages.joinFormat");
+                String format = configManager.msg.getString("messages.joinFormat");
                 String replaced = format.replace("%player_name%", e.getPlayer().getDisplayName());
 
                 Bukkit.broadcastMessage(IridiumColorAPI.process(replaced));
             }
         }
         // join sound
-        if (ConfigManager.settings.getBoolean("settings.joinSound.enabled"))
+        if (configManager.settings.getBoolean("settings.joinSound.enabled"))
         {
             // no global
-            if(!ConfigManager.settings.getBoolean("settings.joinSound.global"))
+            if(!configManager.settings.getBoolean("settings.joinSound.global"))
             {
                 try
                 {
-                    int cooldownSec = ConfigManager.settings.getInt("settings.joinSound.delay") * 20;
+                    int cooldownSec = configManager.settings.getInt("settings.joinSound.delay") * 20;
 
                     (new BukkitRunnable()
                     {
                         public void run()
                         {
-                            e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.valueOf(ConfigManager.settings.getString("settings.joinSound.sound").toUpperCase()), 1.0F, 1.0F);
+                            e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.valueOf(configManager.settings.getString("settings.joinSound.sound").toUpperCase()), 100.0F, 1.0F);
                         }
                     }).runTaskLater((Plugin)main.chat, cooldownSec);
                 }
@@ -104,11 +102,11 @@ public class onjoin implements Listener
                 }
             }
             // global
-            else if(ConfigManager.settings.getBoolean("settings.joinSound.global"))
+            else if(configManager.settings.getBoolean("settings.joinSound.global"))
             {
                 try
                 {
-                    int cooldownSec = ConfigManager.settings.getInt("settings.joinSound.delay") * 20;
+                    int cooldownSec = configManager.settings.getInt("settings.joinSound.delay") * 20;
 
                     (new BukkitRunnable()
                     {
@@ -116,7 +114,7 @@ public class onjoin implements Listener
                         {
                             for(Player player : Bukkit.getServer().getOnlinePlayers())
                             {
-                                player.playSound(player.getLocation(), Sound.valueOf(ConfigManager.settings.getString("settings.joinSound.sound").toUpperCase()), 1.0F, 1.0F);
+                                player.playSound(player.getLocation(), Sound.valueOf(configManager.settings.getString("settings.joinSound.sound").toUpperCase()), 100.0F, 1.0F);
                             }
                         }
 
@@ -129,13 +127,13 @@ public class onjoin implements Listener
             }
         }
         // motd
-        if (ConfigManager.settings.getBoolean("settings.motd"))
+        if (configManager.settings.getBoolean("settings.motd.enabled"))
         {
-            final List<String> motdLines = ConfigManager.msg.getStringList("motdLines");
+            final List<String> motdLines = configManager.msg.getStringList("motdLines");
 
             try
             {
-                int cooldownSec = ConfigManager.settings.getInt("settings.motdDelayTime") * 20;
+                int cooldownSec = configManager.settings.getInt("settings.motd.delay") * 20;
 
                 (new BukkitRunnable()
                 {

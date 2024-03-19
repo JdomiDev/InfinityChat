@@ -1,6 +1,6 @@
 package me.jdomi.chat.listeners;
 
-import me.jdomi.chat.api.config.ConfigManager;
+import me.jdomi.chat.api.config.configManager;
 import me.jdomi.chat.api.hex.IridiumColorAPI;
 import me.jdomi.chat.main;
 import org.bukkit.Bukkit;
@@ -8,7 +8,7 @@ import org.bukkit.Statistic;
 import java.util.List;
 import java.util.Random;
 
-import static me.jdomi.chat.api.config.ConfigManager.console;
+import static me.jdomi.chat.api.config.configManager.console;
 
 public class announcement
 {
@@ -20,14 +20,14 @@ public class announcement
     public static void autoAnnouncments()
     {
         // check if announcement enabled
-        if(ConfigManager.settings.getBoolean("settings.autoAnnouncements.enabled"))
+        if(configManager.settings.getBoolean("settings.autoAnnouncements.enabled"))
         {
-            final List<String> announcmentLines = ConfigManager.settings.getStringList("settings.autoAnnouncements.announcmentLines");
+            final List<String> announcmentLines = configManager.settings.getStringList("settings.autoAnnouncements.announcmentLines");
 
-            interval = ConfigManager.settings.getInt("settings.autoAnnouncements.interval")*20;
+            interval = configManager.settings.getInt("settings.autoAnnouncements.interval")*20;
 
             // random
-            if(ConfigManager.settings.getBoolean("settings.autoAnnouncements.random"))
+            if(configManager.settings.getBoolean("settings.autoAnnouncements.random"))
             {
                 Bukkit.getScheduler().scheduleSyncRepeatingTask(main.chat , new Runnable()
                 {
@@ -41,7 +41,7 @@ public class announcement
                             message = message.replace("%online_players%", String.valueOf(main.chat.getServer().getOnlinePlayers().size()));
                             message = message.replace("%server_max_players%", String.valueOf(main.chat.getServer().getMaxPlayers()));
                             message = message.replace("%statistic_time_played:hours%", String.valueOf(Statistic.PLAY_ONE_MINUTE));
-                            message = message.replace("%prefix%",ConfigManager.settings.getString("plugin-prefix"));
+                            message = message.replace("%prefix%", configManager.settings.getString("plugin-prefix"));
                             Bukkit.broadcastMessage(IridiumColorAPI.process(message));
                         }
                         catch (Exception ex)
@@ -74,7 +74,7 @@ public class announcement
                             message = message.replace("%online_players%", String.valueOf(main.chat.getServer().getOnlinePlayers().size()));
                             message = message.replace("%server_max_players%", String.valueOf(main.chat.getServer().getMaxPlayers()));
                             message = message.replace("%statistic_time_played:hours%", String.valueOf(Statistic.PLAY_ONE_MINUTE));
-                            message = message.replace("%prefix%",ConfigManager.settings.getString("plugin-prefix"));
+                            message = message.replace("%prefix%", configManager.settings.getString("plugin-prefix"));
                             Bukkit.broadcastMessage(IridiumColorAPI.process(message));
                         }
                         catch (Exception ex)

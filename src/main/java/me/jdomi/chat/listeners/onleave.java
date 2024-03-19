@@ -1,7 +1,7 @@
 package me.jdomi.chat.listeners;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.jdomi.chat.api.config.ConfigManager;
+import me.jdomi.chat.api.config.configManager;
 import me.jdomi.chat.api.hex.IridiumColorAPI;
 import me.jdomi.chat.main;
 import org.bukkit.Bukkit;
@@ -13,45 +13,44 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import static me.jdomi.chat.api.config.ConfigManager.console;
+import static me.jdomi.chat.api.config.configManager.console;
 
-public class onleave implements Listener
+public class onLeave implements Listener
 {
-    main plugin;
 
     @EventHandler
     public void onquit(PlayerQuitEvent e)
     {
         // format leave?
-        if (ConfigManager.settings.getBoolean("settings.leaveFormat"))
+        if (configManager.settings.getBoolean("settings.formatting.leaveFormat"))
         {
             if (main.chat.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"))
             {
 
                 e.setQuitMessage("");
 
-                Bukkit.broadcastMessage(IridiumColorAPI.process(PlaceholderAPI.setPlaceholders(e.getPlayer(), ConfigManager.msg.getString("messages.leaveFormat"))));
+                Bukkit.broadcastMessage(IridiumColorAPI.process(PlaceholderAPI.setPlaceholders(e.getPlayer(), configManager.msg.getString("messages.leaveFormat"))));
 
             }
             else
             {
 
                 e.setQuitMessage("");
-                Bukkit.broadcastMessage(IridiumColorAPI.process(ConfigManager.msg.getString("messages.leaveFormat").replace("%player_name%", e.getPlayer().getDisplayName())));
+                Bukkit.broadcastMessage(IridiumColorAPI.process(configManager.msg.getString("messages.leaveFormat").replace("%player_name%", e.getPlayer().getDisplayName())));
             }
         }
         // sound no global
-        if(!ConfigManager.settings.getBoolean("settings.leaveSound.global"))
+        if(!configManager.settings.getBoolean("settings.leaveSound.global"))
         {
             try
             {
-                int cooldownSec = ConfigManager.settings.getInt("settings.leaveSound.delay") * 20;
+                int cooldownSec = configManager.settings.getInt("settings.leaveSound.delay") * 20;
 
                 (new BukkitRunnable()
                 {
                     public void run()
                     {
-                        e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.valueOf(ConfigManager.settings.getString("settings.leaveSound.sound").toUpperCase()), 1.0F, 1.0F);
+                        e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.valueOf(configManager.settings.getString("settings.leaveSound.sound").toUpperCase()), 100.0F, 1.0F);
                     }
                 }).runTaskLater((Plugin)main.chat, cooldownSec+10);
             }
@@ -61,11 +60,11 @@ public class onleave implements Listener
             }
         }
         // sound global
-        else if(ConfigManager.settings.getBoolean("settings.leaveSound.global"))
+        else if(configManager.settings.getBoolean("settings.leaveSound.global"))
         {
             try
             {
-                int cooldownSec = ConfigManager.settings.getInt("settings.leaveSound.delay") * 20;
+                int cooldownSec = configManager.settings.getInt("settings.leaveSound.delay") * 20;
 
                 (new BukkitRunnable()
                 {
@@ -75,7 +74,7 @@ public class onleave implements Listener
                         {
                             if(!(e.getPlayer().getDisplayName().equals(player.getDisplayName())))
                             {
-                                player.playSound(player.getLocation(), Sound.valueOf(ConfigManager.settings.getString("settings.leaveSound.sound").toUpperCase()), 1.0F, 1.0F);
+                                player.playSound(player.getLocation(), Sound.valueOf(configManager.settings.getString("settings.leaveSound.sound").toUpperCase()), 100.0F, 1.0F);
                             }
                         }
                     }

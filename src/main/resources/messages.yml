@@ -1,5 +1,5 @@
 # Made with <3 by Jdomi
-# Config originally created by InfinityChat 1.9.0
+# Config originally created by InfinityChat 2.0.0
 #
 #  ╭━━╮╱╱╭━╮╱╱╱╱╭╮╱╱╱╱╭━━━┳╮╱╱╱╱╭╮
 #  ╰┫┣╯╱╱┃╭╯╱╱╱╭╯╰╮╱╱╱┃╭━╮┃┃╱╱╱╭╯╰╮
@@ -17,7 +17,7 @@ messages:
   clearChat: "&a%player_name% &7cleared the chat."
   joinFormat: "&7[&a+&7] &7%player_name%"
   leaveFormat: "&7[&c-&7] &7%player_name%"
-  pluginReload: "&aPlugin Reloaded"
+  pluginReload: "&#C4D3D1Plugin Reloaded"
   updateAvailable: "&cupdate available!"
   staffChatArgs: "&cUsage: /staff <message here>"
   announceArgs: "&cUsage: /announce <message here>"
@@ -30,6 +30,7 @@ messages:
   playerIsMuted: "&cYou cannot type in chat because you are muted!"
   alreadyUnmute: "&cPlayer %player% is not muted!"
   alreadyMute: "&cPlayer %player% is muted already!"
+  mentionedPlayer: "&aYou have been mentioned by &f%player%&a!"
 motdLines:
   - "&7Welcome &a%player_name%"
   - "&7There are &e%server_online% &7online players out of &e %server_max_players%"

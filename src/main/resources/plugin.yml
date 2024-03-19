@@ -1,6 +1,6 @@
 main: me.jdomi.chat.main
 name: InfinityChat
-version: 1.9.0
+version: 2.0.0
 author: Jdomi
 api-version: '1.20'
 softdepend:
@@ -29,7 +29,7 @@ permissions:
     ic.cc: { description: 'Access for /cc' }
     ic.bypass: { description: 'Bypass the chat spam filter' }
     ic.placeholderChat: { description: 'Allow chat placeholders'}
-    ic.staff: { description: 'Staff chat' }
+    ic.staff: { description: 'Staff Perm' }
     ic.announce: { description: 'Access to /announce'}
     ic.mute: {'Access to /mute'}
     ic.shout: {'Allows you to bypass the capital letter limit'}
